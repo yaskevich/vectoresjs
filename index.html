@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>vectores.js</title>
+<script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+<link href="https://fonts.googleapis.com/css?family=Merriweather&amp;subset=cyrillic-ext" rel="stylesheet">
+<link rel="stylesheet" href="tip.css">
+<!-- <script src="d3.v3.min.js"></script> -->
+<script src="d3tip.js"></script>
+<link rel="icon" 
+      type="image/png"       
+      href="icons8-mind-map-40.png" />
+<!-- icon by https://icons8.com/license -->
+<style>
+
+*{
+font-family: 'Merriweather', serif;
+}
+.link {
+  stroke: #aaa;
+}
+
+.node text {
+stroke:#333;
+cursos:pointer;
+}
+
+/*
+.node circle{
+stroke:#fff;
+stroke-width:3px;
+fill:#555;
+}*/
+
+
+.low {
+	fill:#DB4437;
+	
+}
+.mid {
+	fill:#F4B400;
+}
+.high {
+	fill:#0F9D58;
+}
+</style>
+<body>
+<script>
+
+var width = window.innerWidth,
+    height = window.innerHeight;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var force = d3.layout.force()
+    .gravity(.05)
+    .distance(100)
+    .charge(-100)
+    .size([width, height]);
+	
+var tip = d3.tip().attr('class', 'd3-tip').html(function(d) {return d.tip; });
+	svg.call(tip);
+
+d3.json("data.json", function(data) {
+	var nds  = [], lnks  = [],  i = 0;
+	var query  = "";
+	for(var k in data["frequencies"]) {
+	   var wTag = k.split("_");
+	   nds.push({"name":wTag[0],"group":3, tip:wTag[1], cls:data["frequencies"][k][1], "flag":i});
+	   i ? lnks.push({"source":0,"target":i,"value":data["neighbors"][i-1][1]}): query = wTag[0];
+	   i++;
+	}
+	// console.log(nds, lnks);
+	
+	
+	var links = lnks;
+  force
+      //.nodes(json.nodes)
+	  .nodes(nds)
+      .links(lnks)
+	  .linkDistance(function(d) { 
+		var dv  = Math.round(d.value * 100) / 100;
+		var dis = (dv*100)-50;
+		console.log(dv, dis);
+		//return  dis; 
+		return  7*dis; 
+		}) 
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(lnks)
+    .enter().append("line")
+      .attr("class", "link")
+    .style("stroke-width", function(d) { return Math.sqrt(d.val); });
+
+  var node = svg.selectAll(".node")
+      .data(nds)
+    .enter().append("g")
+      .attr("class", function(d) { return "node " + d.cls; })
+      .call(force.drag);
+
+  node.append("circle")
+	 .attr("class", function(d) { return d.cls; })
+      .attr("r",10)
+	     .on('mouseover', tip.show)
+		.on('mouseout', tip.hide);
+
+  node.append("text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  });
+
+});
+
+</script>
