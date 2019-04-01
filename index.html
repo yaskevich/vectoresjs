@@ -1,5 +1,11 @@
 <!DOCTYPE html>
+<html lang="ru">
+<head>
 <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Simple visualization of RusVectores embeddings">
+<meta name="author" content="Alyaxey Yaskevich">
 <title>vectores.js</title>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Merriweather&amp;subset=cyrillic-ext" rel="stylesheet">
@@ -13,7 +19,6 @@
       href="icons8-mind-map-40.png" />
 <!-- icon by https://icons8.com/license -->
 <style>
-
 *{
 font-family: 'Merriweather', serif;
 }
@@ -45,200 +50,199 @@ fill:#555;
 	fill:#0F9D58;
 }
 </style>
-<body>
-
-<div class="row">
-  <!-- <div class="card warning">Введите слово</div> -->
-  <div class="card warning"><input type="text" name="word" id="word" value="" placeholder="патефон"></div>
-  <div class="card"><button class="secondary" id="search">Искать</button></div>
-  <div class="card error" id="res" style="visibility:hidden"><div class="section" id="res2"></div></div>
-</div>
 <script>
+document.addEventListener("DOMContentLoaded", function(e) {
+	var width = window.innerWidth,
+		height = window.innerHeight;
 
+	var svg = d3.select("body").append("svg")
+		.attr("width", width)
+		.attr("height", height);
 
+	var force = d3.layout.force()
+		.gravity(.05)
+		.distance(100)
+		.charge(-100)
+		.size([width, height]);
+		
+	var tip = d3.tip().attr('class', 'd3-tip').html(function(d) {return d.tip; });
+		svg.call(tip);
 
-var width = window.innerWidth,
-    height = window.innerHeight;
+	var datanodes  = [], datalinks  = [],  i = 1;	
+		
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
+	function buildGraph(inlinks, innodes){
+		
+		d3.selectAll(".link").remove();
+		d3.selectAll(".node").remove();
+		d3.selectAll("circle").remove();
+		
+		console.log("step1");
+		
+		var links = inlinks;
+	  force
+		  //.nodes(json.nodes)
+		  .nodes(innodes)
+		  .links(inlinks)
+		  .linkDistance(function(d) { 
+			var dv  = Math.round(d.value * 100) / 100;
+			var dis = (dv*100)-50;
+			console.log(dv, dis);
+			//return  dis; 
+			return  7*dis; 
+			}) 
+		  .start();
+		console.log("step2");
 
-var force = d3.layout.force()
-    .gravity(.05)
-    .distance(100)
-    .charge(-100)
-    .size([width, height]);
-	
-var tip = d3.tip().attr('class', 'd3-tip').html(function(d) {return d.tip; });
-	svg.call(tip);
+	  var linksel = svg.selectAll(".link")
+		  .data(inlinks);
+		  var link = linksel
+		.enter().append("line")
+		  .attr("class", "link")
+		.style("stroke-width", function(d) { return Math.sqrt(d.val); });
 
-var datanodes  = [], datalinks  = [],  i = 1;	
-	
+		
+		var nodesel = svg.selectAll(".node")
+		  .data(innodes);
+	  var node = nodesel
+		.enter().append("g")
+		  .attr("class", function(d) { return "node " + d.cls; })
+		  .call(force.drag);
 
-function buildGraph(inlinks, innodes){
-	
-	d3.selectAll(".link").remove();
-	d3.selectAll(".node").remove();
-	d3.selectAll("circle").remove();
-	
-	console.log("step1");
-	
-	var links = inlinks;
-  force
-      //.nodes(json.nodes)
-	  .nodes(innodes)
-      .links(inlinks)
-	  .linkDistance(function(d) { 
-		var dv  = Math.round(d.value * 100) / 100;
-		var dis = (dv*100)-50;
-		console.log(dv, dis);
-		//return  dis; 
-		return  7*dis; 
-		}) 
-      .start();
-	console.log("step2");
+	  node.append("circle")
+		 .attr("class", function(d) { return d.cls; })
+		  .attr("r",10)
+			 .on('mouseover', tip.show)
+			.on('mouseout', tip.hide)
+			.on("click", function(d){
+				var word  = d.name+"_"+d.tip;
+				var startnode  = d.index;
+				console.log(word, startnode);
+				/*
+				d3.json("/syn?word="+encodeURIComponent(word), function(data) {
+					
+					data = data[Object.keys(data)[0]];
+					var wordpos = Object.keys(data)[0];
+					data = data[wordpos];
+					//console.log(datanodes.filter(function(d){return d.category == category;}));
+					console.log(data);
+					
+					var src  = datanodes.filter(function(d){return d.key == word;}).shift();
+					console.log(src);
+					
+					for(var k in data) {
+					   var wTag = k.split("_");
+					   
+					   datanodes.push({"key":k, "name":wTag[0],"group":3, tip:wTag[1], cls:(Math.random() > 0.5 ? "low": "mid"), "flag":i});
+					   //datalinks.push({"source":startnode,"target":i,"value":data[k]});
+					   var tg  = datanodes.filter(function(d){return d.key == k;}).shift();
+					   datalinks.push({"source":src,"target":tg,"value":data[k]});
+					   i++;
+					}
+					console.log(datanodes);
+					console.log(datalinks);
+					// buildGraph(datanodes, datalinks);
+				});
+				*/
+			});
 
-  var linksel = svg.selectAll(".link")
-      .data(inlinks);
-	  var link = linksel
-    .enter().append("line")
-      .attr("class", "link")
-    .style("stroke-width", function(d) { return Math.sqrt(d.val); });
+	  node.append("text")
+		  .attr("dx", 12)
+		  .attr("dy", ".35em")
+		  .text(function(d) { return d.name });
 
-	
-	var nodesel = svg.selectAll(".node")
-      .data(innodes);
-  var node = nodesel
-    .enter().append("g")
-      .attr("class", function(d) { return "node " + d.cls; })
-      .call(force.drag);
+		  nodesel.exit().remove();
+		  
+	  force.on("tick", function() {
+		link.attr("x1", function(d) { return d.source.x; })
+			.attr("y1", function(d) { return d.source.y; })
+			.attr("x2", function(d) { return d.target.x; })
+			.attr("y2", function(d) { return d.target.y; });
 
-  node.append("circle")
-	 .attr("class", function(d) { return d.cls; })
-      .attr("r",10)
-	     .on('mouseover', tip.show)
-		.on('mouseout', tip.hide)
-		.on("click", function(d){
-			var word  = d.name+"_"+d.tip;
-			var startnode  = d.index;
-			console.log(word, startnode);
-			/*
-			d3.json("/syn?word="+encodeURIComponent(word), function(data) {
-				
-				data = data[Object.keys(data)[0]];
-				var wordpos = Object.keys(data)[0];
-				data = data[wordpos];
-				//console.log(datanodes.filter(function(d){return d.category == category;}));
-				console.log(data);
-				
-				var src  = datanodes.filter(function(d){return d.key == word;}).shift();
-				console.log(src);
-				
-				for(var k in data) {
+		node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+	  });
+	}	
+		
+		function getFromAPI(wrd){
+		var url = wrd?("/syn?word="+encodeURIComponent(wrd)): "/last";
+			d3.json(url, function(data) {
+				buildFromAPI(wrd, data);	
+			});
+		}
+		
+		function buildFromAPI(keyword, data){
+			data = data[Object.keys(data)[0]];
+			var wordpos = Object.keys(data)[0];
+			data = data[wordpos];
+			var word2;
+			if (!keyword){
+				var pp = wordpos.split("_");
+				keyword  = pp[0];
+				word2 = pp[1];
+			} else {
+				word2  = wordpos.substring(keyword.length+1);
+			}
+			
+			
+			d3.select("#res").style("visibility", "visible");
+			d3.select("#res2").html(wordpos)
+
+			console.log("word", keyword, wordpos);
+			
+			console.log(data);
+
+			datanodes  = [], datalinks  = [],  i = 1;
+
+			datanodes.push({"key":wordpos, "name":keyword,"group":3, tip:word2, cls:"high", "flag":1});
+			for(var k in data) {
+				var wTag = k.split("_");
+
+				datanodes.push({"key":k, "name":wTag[0],"group":3, tip:wTag[1], cls:(Math.random() > 0.5 ? "low": "mid"), "flag":i});
+				datalinks.push({"source":0,"target":i,"value":data[k]});
+				i++;
+			}
+			console.log(datanodes, datalinks);
+			buildGraph(datalinks, datanodes);
+		
+		}
+		
+		d3.select("#search").on("click", function(){
+			var word = d3.select("#word").property("value"); 
+			if (/^[А-ЯЁа-яё]+$/.test(word) && word) {
+				//console.log("word", word);
+				getFromAPI(word);
+
+			} else {
+				console.log("чёт мутный какойта текст, не буду искать");
+			}
+		});
+
+		function buildDef(){
+			d3.json("/def", function(data) {
+				var nds  = [], lnks  = [],  i = 0;
+				var query  = "";
+				for(var k in data["frequencies"]) {
 				   var wTag = k.split("_");
-				   
-				   datanodes.push({"key":k, "name":wTag[0],"group":3, tip:wTag[1], cls:(Math.random() > 0.5 ? "low": "mid"), "flag":i});
-				   //datalinks.push({"source":startnode,"target":i,"value":data[k]});
-				   var tg  = datanodes.filter(function(d){return d.key == k;}).shift();
-				   datalinks.push({"source":src,"target":tg,"value":data[k]});
+				   nds.push({"name":wTag[0],"group":3, tip:wTag[1], cls:data["frequencies"][k][1], "flag":i});
+				   i ? lnks.push({"source":0,"target":i,"value":data["neighbors"][i-1][1]}): query = wTag[0];
 				   i++;
 				}
-				console.log(datanodes);
-				console.log(datalinks);
-				// buildGraph(datanodes, datalinks);
-			});
-			*/
-		});
-
-  node.append("text")
-      .attr("dx", 12)
-      .attr("dy", ".35em")
-      .text(function(d) { return d.name });
-
-	  nodesel.exit().remove();
-	  
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-  });
-}	
-	
-	function getFromAPI(wrd){
-	var url = wrd?("/syn?word="+encodeURIComponent(wrd)): "/last";
-		d3.json(url, function(data) {
-			buildFromAPI(wrd, data);	
-		});
-	}
-	
-	function buildFromAPI(keyword, data){
-		data = data[Object.keys(data)[0]];
-		var wordpos = Object.keys(data)[0];
-		data = data[wordpos];
-		var word2;
-		if (!keyword){
-			var pp = wordpos.split("_");
-			keyword  = pp[0];
-			word2 = pp[1];
-		} else {
-			word2  = wordpos.substring(keyword.length+1);
+				//console.log(nds, lnks);
+				//console.log({nds: nds, lnks:lnks});
+				buildGraph(lnks, nds);	
+				});
 		}
-		
-		
-		d3.select("#res").style("visibility", "visible");
-		d3.select("#res2").html(wordpos)
 
-		console.log("word", keyword, wordpos);
-		
-		console.log(data);
-
-		datanodes  = [], datalinks  = [],  i = 1;
-
-		datanodes.push({"key":wordpos, "name":keyword,"group":3, tip:word2, cls:"high", "flag":1});
-		for(var k in data) {
-			var wTag = k.split("_");
-
-			datanodes.push({"key":k, "name":wTag[0],"group":3, tip:wTag[1], cls:(Math.random() > 0.5 ? "low": "mid"), "flag":i});
-			datalinks.push({"source":0,"target":i,"value":data[k]});
-			i++;
-		}
-		console.log(datanodes, datalinks);
-		buildGraph(datalinks, datanodes);
-	
-	}
-	
-	d3.select("#search").on("click", function(){
-		var word = d3.select("#word").property("value"); 
-		if (/^[А-ЯЁа-яё]+$/.test(word) && word) {
-			//console.log("word", word);
-			getFromAPI(word);
-
-		} else {
-			console.log("чёт мутный какойта текст, не буду искать");
-		}
-	});
-
-	function buildDef(){
-		d3.json("/def", function(data) {
-			var nds  = [], lnks  = [],  i = 0;
-			var query  = "";
-			for(var k in data["frequencies"]) {
-			   var wTag = k.split("_");
-			   nds.push({"name":wTag[0],"group":3, tip:wTag[1], cls:data["frequencies"][k][1], "flag":i});
-			   i ? lnks.push({"source":0,"target":i,"value":data["neighbors"][i-1][1]}): query = wTag[0];
-			   i++;
-			}
-			//console.log(nds, lnks);
-			//console.log({nds: nds, lnks:lnks});
-			buildGraph(lnks, nds);	
-			});
-	}
-
-	// buildDef();
-	getFromAPI();
-
+		// buildDef();
+		getFromAPI();
+});
 </script>
+</head>
+<body>
+	<div class="row">
+	  <div class="card warning"><input type="text" name="word" id="word" value="" placeholder="патефон"></div>
+	  <div class="card"><button class="secondary" id="search">Искать</button></div>
+	  <div class="card error" id="res" style="visibility:hidden"><div class="section" id="res2"></div></div>
+	</div>
+</body>
+</html>
