@@ -70,6 +70,11 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
 	var datanodes  = [], datalinks  = [],  i = 1;	
 		
+	d3.select("#word").on("keypress", function() {
+		if(d3.event.keyCode === 32 || d3.event.keyCode === 13){
+			doClick();
+		}
+	  });
 
 	function buildGraph(inlinks, innodes){
 		
@@ -207,7 +212,12 @@ document.addEventListener("DOMContentLoaded", function(e) {
 		}
 		
 		d3.select("#search").on("click", function(){
-			var word = d3.select("#word").property("value"); 
+			doClick();
+		});
+
+		
+		function doClick(){
+		var word = d3.select("#word").property("value"); 
 			if (/^[А-ЯЁа-яё]+$/.test(word) && word) {
 				//console.log("word", word);
 				getFromAPI(word);
@@ -215,8 +225,8 @@ document.addEventListener("DOMContentLoaded", function(e) {
 			} else {
 				console.log("чёт мутный какойта текст, не буду искать");
 			}
-		});
-
+		}
+		
 		function buildDef(){
 			d3.json("/def", function(data) {
 				var nds  = [], lnks  = [],  i = 0;
