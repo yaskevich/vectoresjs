@@ -7,7 +7,7 @@
 <meta name="description" content="Simple visualization of RusVectores embeddings">
 <meta name="author" content="Alyaxey Yaskevich">
 <title>vectores.js</title>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Merriweather&amp;subset=cyrillic-ext" rel="stylesheet">
 <link rel="stylesheet" href="tip.css">
 <!-- https://minicss.org/docs#card-sections -->
@@ -171,11 +171,16 @@ document.addEventListener("DOMContentLoaded", function(e) {
 		function getFromAPI(wrd){
 		var url = wrd?("/syn?word="+encodeURIComponent(wrd)): "/last";
 			d3.json(url, function(data) {
-				buildFromAPI(wrd, data);	
+				if (data) {
+					buildFromAPI(wrd, data);	
+				} else {
+					alert("Такого слова нет в модели :(")
+				}
 			});
 		}
 		
-		function buildFromAPI(keyword, data){
+		function buildFromAPI(keyword, data){			
+			// console.log(keyword, data);
 			data = data[Object.keys(data)[0]];
 			var wordpos = Object.keys(data)[0];
 			data = data[wordpos];
@@ -223,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
 				getFromAPI(word);
 
 			} else {
-				console.log("чёт мутный какойта текст, не буду искать");
+				alert("Слово "+word+" не годится для поиска!");
 			}
 		}
 		
