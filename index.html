@@ -8,9 +8,13 @@
 <meta name="author" content="Alyaxey Yaskevich">
 <title>vectores.js</title>
 <script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Merriweather&amp;subset=cyrillic-ext" rel="stylesheet">
 <link rel="stylesheet" href="tip.css">
+<link rel="stylesheet" href="micromodal.css">
 <!-- https://minicss.org/docs#card-sections -->
+<!-- https://minicss.org/v2/contextual -->
+<!-- https://micromodal.now.sh/#installation -->
 <link rel="stylesheet" href="mini-default.min.css">
 <!-- <script src="d3.v3.min.js"></script> -->
 <script src="d3tip.js"></script>
@@ -51,24 +55,50 @@ fill:#555;
 }
 </style>
 <script>
-document.addEventListener("DOMContentLoaded", function(e) {
-	var width = window.innerWidth,
-		height = window.innerHeight;
 
-	var svg = d3.select("body").append("svg")
-		.attr("width", width)
-		.attr("height", height);
+window.addEventListener('resize', function(e) {
+	console.log("RESIZE");
+} );
+document.addEventListener("DOMContentLoaded", function(e) {
+	MicroModal.init();
+	var width = 100, height = 100;
+
+	console.log("", width);
+	
+	var svg = d3.select("body").append("svg");
+		
 
 	var force = d3.layout.force()
 		.gravity(.05)
 		.distance(100)
-		.charge(-100)
-		.size([width, height]);
+		.charge(-100);
+		
+		
+		
+function realignObjects(){
+			console.log(width, height);
+			width = window.innerWidth, height = window.innerHeight;
+			var toolbar  = d3.select("#toolbar").node().getBoundingClientRect();
+			var bd  = d3.select("body").node().getBoundingClientRect();
+			height = height-toolbar.height;
+			
+			console.log(height, "bd", toolbar.width);
+			window.scrollBy(0,1);
+			var resumeHeader = document.querySelector('#toolbar');
+			var resumeHeaderComputedWidth = getComputedStyle(resumeHeader, null).getPropertyValue('width');
+			console.log("new1", resumeHeaderComputedWidth)
+			height -=20;
+			svg.attr("width", width).attr("height", height);
+			force.size([width, height])
+
+}		
 		
 	var tip = d3.tip().attr('class', 'd3-tip').html(function(d) {return d.tip; });
 		svg.call(tip);
 
 	var datanodes  = [], datalinks  = [],  i = 1;	
+	var delta = 0;
+	var radius = 10;
 		
 	d3.select("#word").on("keypress", function() {
 		if(d3.event.keyCode === 32 || d3.event.keyCode === 13){
@@ -90,14 +120,17 @@ document.addEventListener("DOMContentLoaded", function(e) {
 		  .nodes(innodes)
 		  .links(inlinks)
 		  .linkDistance(function(d) { 
-			var dv  = Math.round(d.value * 100) / 100;
-			var dis = (dv*100)-50;
-			console.log(dv, dis);
-			//return  dis; 
-			return  7*dis; 
+				// var dv  = Math.round(d.value * 100) / 100;
+				//var dis = (dv*100)-50;var dv  = Math.round(d.value * 100) / 100;
+				var dv  = d.value * 100;
+				var df = Math.log(dv);
+				var koef  = isFinite(df)?df:1;
+				dis = parseInt(dv * koef)+radius;				
+				console.log(d.key, d.value, koef, dis);
+				return dis; 
 			}) 
 		  .start();
-		console.log("step2");
+		//console.log("step2");
 
 	  var linksel = svg.selectAll(".link")
 		  .data(inlinks);
@@ -116,13 +149,13 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
 	  node.append("circle")
 		 .attr("class", function(d) { return d.cls; })
-		  .attr("r",10)
+		  .attr("r",radius)
 			 .on('mouseover', tip.show)
 			.on('mouseout', tip.hide)
 			.on("click", function(d){
 				var word  = d.name+"_"+d.tip;
 				var startnode  = d.index;
-				console.log(word, startnode);
+				//console.log(word, startnode);
 				/*
 				d3.json("/syn?word="+encodeURIComponent(word), function(data) {
 					
@@ -159,12 +192,12 @@ document.addEventListener("DOMContentLoaded", function(e) {
 		  nodesel.exit().remove();
 		  
 	  force.on("tick", function() {
-		link.attr("x1", function(d) { return d.source.x; })
+			link.attr("x1", function(d) { return d.source.x; })
 			.attr("y1", function(d) { return d.source.y; })
 			.attr("x2", function(d) { return d.target.x; })
 			.attr("y2", function(d) { return d.target.y; });
 
-		node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+			node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 	  });
 	}	
 		
@@ -172,9 +205,12 @@ document.addEventListener("DOMContentLoaded", function(e) {
 		var url = wrd?("/syn?word="+encodeURIComponent(wrd)): "/last";
 			d3.json(url, function(data) {
 				if (data) {
-					buildFromAPI(wrd, data);	
+					buildFromAPI(wrd, data);						
 				} else {
-					alert("Такого слова нет в модели :(")
+					// alert("Такого слова нет в модели :(")
+					d3.select("#nomodel").text(wrd);
+					MicroModal.show('modal-1'); 
+					
 				}
 			});
 		}
@@ -193,25 +229,27 @@ document.addEventListener("DOMContentLoaded", function(e) {
 				word2  = wordpos.substring(keyword.length+1);
 			}
 			
+			// console.log("data", data);
 			
 			d3.select("#res").style("visibility", "visible");
 			d3.select("#res2").html(wordpos)
 
-			console.log("word", keyword, wordpos);
+			// console.log("word", keyword, wordpos);
 			
-			console.log(data);
-
+			realignObjects();
 			datanodes  = [], datalinks  = [],  i = 1;
-
-			datanodes.push({"key":wordpos, "name":keyword,"group":3, tip:word2, cls:"high", "flag":1});
+			
+			datanodes.push({"key":wordpos, "name":keyword,"group":3, tip:word2, cls:"mid", "flag":1});
 			for(var k in data) {
 				var wTag = k.split("_");
-
-				datanodes.push({"key":k, "name":wTag[0],"group":3, tip:wTag[1], cls:(Math.random() > 0.5 ? "low": "mid"), "flag":i});
-				datalinks.push({"source":0,"target":i,"value":data[k]});
+				// (Math.random() > 0.5 ? "low": "mid")
+				datanodes.push({"key":k, "name":wTag[0],"group":3, tip:wTag[1], cls:"low", "flag":i});
+				var dif  = 1 - data[k];
+				if ((delta && delta > dif) || !delta) { delta  = dif; }
+				datalinks.push({"source":0,"target":i,"value":dif, "key":k});
 				i++;
 			}
-			console.log(datanodes, datalinks);
+			// console.log(datanodes, datalinks);
 			buildGraph(datalinks, datanodes);
 		
 		}
@@ -226,7 +264,6 @@ document.addEventListener("DOMContentLoaded", function(e) {
 			if (/^[А-ЯЁа-яё]+$/.test(word) && word) {
 				//console.log("word", word);
 				getFromAPI(word);
-
 			} else {
 				alert("Слово "+word+" не годится для поиска!");
 			}
@@ -250,14 +287,48 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
 		// buildDef();
 		getFromAPI();
+		
 });
 </script>
 </head>
 <body>
-	<div class="row">
-	  <div class="card warning"><input type="text" name="word" id="word" value="" placeholder="патефон"></div>
-	  <div class="card"><button class="secondary" id="search">Искать</button></div>
-	  <div class="card error" id="res" style="visibility:hidden"><div class="section" id="res2"></div></div>
+	<div class="container" id="toolbar">
+	  <div class="row">
+			<div class="col-sm">
+				<input type="text" name="word" id="word" value="" placeholder="патефон">
+				<label for="word" class="button" id="search">Искать</label>
+			</div>  
+			<!-- <div class="col-sm"> -->
+				<!-- <div class="card error" id="res" style="visibility:hidden"> -->
+					<!-- <p id="res2"></p> -->
+				<!-- </div>		 -->
+			<!-- </div> -->
+		</div>
+	  <!-- <div class="row card"><button class="secondary" id="search">Искать</button></div> -->
 	</div>
+	
+	
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+      <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+        <header class="modal__header">
+          <h2 class="modal__title" id="modal-1-title">
+            О нет! :-(
+          </h2>
+          <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+        </header>
+        <main class="modal__content" id="modal-1-content">
+          <p>
+            Слово <code id="nomodel">tab</code> отсутствует в модели!
+          </p>
+        </main>
+        <!-- <footer class="modal__footer"> -->
+          <!-- <button class="modal__btn modal__btn-primary">Continue</button> -->
+          <!-- <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Закрыть, испытывая светлую грусть</button> -->
+        <!-- </footer> -->
+      </div>
+    </div>
+  </div>	
+
 </body>
 </html>
