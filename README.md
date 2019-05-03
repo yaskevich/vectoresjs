@@ -1,6 +1,8 @@
 # vectores.js
 
-Dataviz toolkit for RusVectores.org
+Dataviz toolkit for vector semantic models. Works with [gensim](https://github.com/RaRe-Technologies/gensim/) library.
+
+Web-version currently fetches API of RusVectores.org
 
 Made with D3.js.
 
