@@ -36,22 +36,31 @@ parser.add_argument(
     "-m",
     "--model",
     help="path to vector model file. If ommited, first model with extension bin.gz (as binary) "
-    + "or .vec.gz (as non-binary) in directory is loaded",
+    "or .vec.gz (as non-binary) in directory is loaded",
     default="",
 )
 parser.add_argument(
     "-o",
     "--output",
     help="path to ouptut directory where to store files of visualization. If ommited, in "
-    + "current directory new one will be made, with a name based on a timestamp",
+    "current directory new one will be made, with a name based on a timestamp",
     default="",
+)
+
+parser.add_argument(
+    "-l",
+    "--library",
+    help="path to d3.js library, can be 'web' (link to version at the d3js site) or 'local'"
+    " (file in the directory with generated HTML, if not present, it is downloaded from web)."
+    " Default is 'web'",
+    default="web",
 )
 args = parser.parse_args()
 
 if not args.output:
     dt = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
     new_dir = os.path.join(dir, dt)
-    aa = pathlib.Path(new_dir).mkdir(parents=True, exist_ok=True)
+    pathlib.Path(new_dir).mkdir(parents=True, exist_ok=True)
     args.output = new_dir
 
 if not args.model:
@@ -63,4 +72,4 @@ model = gensim.models.KeyedVectors.load_word2vec_format(
 )
 model.init_sims(replace=True)
 token = args.token if args.token else random.choice(model.index2entity)
-visualize_dir(args.output, model, token, args.depth, args.nbr, args.edge)
+vec2graph(args.output, model, token, args.depth, args.nbr, args.edge, args.library)

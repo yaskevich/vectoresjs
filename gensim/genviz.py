@@ -1,4 +1,7 @@
 import os
+import requests
+from requests.exceptions import HTTPError
+
 
 html = """<!DOCTYPE html>
 <html>
@@ -8,8 +11,7 @@ html = """<!DOCTYPE html>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="wordplaceholder">
 		<title>wordplaceholder</title>
-
-		<script src="https://d3js.org/d3.v3.min.js"></script>
+		<script src="d3pathplaceholder"></script>
 		<script>(function(){
 'use strict';
 document.addEventListener("DOMContentLoaded", function(e) {
@@ -109,6 +111,8 @@ document.addEventListener("DOMContentLoaded", function(e) {
 def get_data(model, word, depth=0, topn=10):
     datum = {}
 
+    if not word:
+        raise ValueError("empty string")
     res = get_most_similar(model, word, topn)
     datum[word] = res[0]
     get_neighbors(model, datum, res[1], depth, topn)
@@ -150,9 +154,10 @@ def get_most_similar(model, word, topn=10):
     return [arr, neighbors]
 
 
-def render(word, data, topn=10, interlinks=[], edge=1):
+def render(word, data, topn=10, interlinks=[], edge=1, d3path=""):
     return (
-        html.replace("wordplaceholder", word)
+        html.replace("d3pathplaceholder", d3path)
+        .replace("wordplaceholder", word)
         .replace("dataplaceholder", str(data))
         .replace("topn;", "topn = " + str(topn) + ";")
         .replace("linksplaceholder", "pages = " + str(interlinks))
@@ -160,14 +165,51 @@ def render(word, data, topn=10, interlinks=[], edge=1):
     )
 
 
-def visualize_dir(dir, model, word, depth=0, topn=10, edge=1):
-    data = get_data(model, word, depth=depth, topn=topn)
+def vec2graph(path, model, words, depth=0, topn=10, edge=1, library="web"):
+    d3webpath = "https://d3js.org/d3.v3.min.js"
+    data = {}
+    if isinstance(words, list):
+        for word in words:
+            data.update(get_data(model, word, depth=depth, topn=topn))
+    elif isinstance(words, str):
+        data = get_data(model, words, depth=depth, topn=topn)
+    else:
+        raise ValueError("wrong type")
+
     pages = list(data.keys())
+
+    if library == "web":
+        d3path = d3webpath
+    elif library == "local":
+        d3path = "d3.v3.min.js"
+        fullpath = os.path.join(path, d3path)
+
+        if not os.path.isfile(fullpath):
+            try:
+                response = requests.get(d3webpath)
+                response.raise_for_status()
+            except HTTPError as err:
+                print(err)
+            except Exception as err:
+                print(err)
+            else:
+                response.encoding = "utf-8"
+                with open(fullpath, "w", encoding="utf-8") as d3:
+                    d3.write(response.text)
 
     for page in pages:
         fname = "".join([x if x.isalnum() else "_" for x in page])
-        path = os.path.join(dir, fname + ".html")
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(render(page, data[page], topn, pages, edge))
+        filepath = os.path.join(path, fname + ".html")
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(
+                render(
+                    page,
+                    data[page],
+                    topn=topn,
+                    interlinks=pages,
+                    edge=edge,
+                    d3path=d3path,
+                )
+            )
 
     pass
