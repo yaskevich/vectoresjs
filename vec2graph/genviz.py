@@ -126,7 +126,6 @@ def get_neighbors(model, datum, stack, depth, topn):
         depth -= 1
 
         for neighbor in stack:
-
             res = get_most_similar(model, neighbor, topn)
             datum[neighbor] = res[0]
             get_neighbors(model, datum, res[1], depth, topn)
@@ -137,7 +136,6 @@ def get_most_similar(model, word, topn=10):
     arr = [{"source": word, "target": word, "value": 1}]
     neighbors = []
     try:
-
         mostsim = model.similar_by_word(word, topn=topn)
 
         for item in mostsim:
@@ -149,13 +147,13 @@ def get_most_similar(model, word, topn=10):
             for ab in range(len(neighbors))
             for ba in range(ab + 1, len(neighbors))
         ]
-
         for pair in pairs:
             arr.append(
                 {"source": pair[0], "target": pair[1], "value": model.similarity(*pair)}
             )
     except:
-        return [arr, neighbors]
+        pass
+    return [arr, neighbors]
 
 
 def render(word, data, topn=10, threshold=0, interlinks=[], edge=1, d3path=""):
