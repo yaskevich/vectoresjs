@@ -1,7 +1,5 @@
-import os
-import requests
+import os, gensim, requests
 from requests.exceptions import HTTPError
-
 
 html = """<!DOCTYPE html>
 <html>
@@ -18,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
   var width = 100, height = 100;
   var maincolor = "#F4B400";
   var linksplaceholder;
+  var thresholdplaceholder;
   var topn;
   var svg = d3.select("body").append("svg");
   var linkstrokewidth;
@@ -96,7 +95,9 @@ document.addEventListener("DOMContentLoaded", function(e) {
       datanodes.push({"name":data[k]["target"], color:"#DB4437", page:pages.indexOf(data[k]["target"]) > -1});
       order[key] = k;
     }
-    datalinks.push({"source":src, "target":tg, "value":dif, "key":key});
+    if (data[k]["value"] > threshold) {
+      datalinks.push({"source":src, "target":tg, "value":dif, "key":key});
+    }
   }
   buildGraph(datalinks, datanodes);
 });
@@ -133,40 +134,45 @@ def get_neighbors(model, datum, stack, depth, topn):
 
 
 def get_most_similar(model, word, topn=10):
-
-    mostsim = model.similar_by_word(word, topn=topn)
     arr = [{"source": word, "target": word, "value": 1}]
     neighbors = []
+    try:
 
-    for item in mostsim:
-        arr.append({"source": word, "target": item[0], "value": item[1]})
-        neighbors.append(item[0])
-    pairs = [
-        (neighbors[ab], neighbors[ba])
-        for ab in range(len(neighbors))
-        for ba in range(ab + 1, len(neighbors))
-    ]
+        mostsim = model.similar_by_word(word, topn=topn)
 
-    for pair in pairs:
-        arr.append(
-            {"source": pair[0], "target": pair[1], "value": model.similarity(*pair)}
-        )
-    return [arr, neighbors]
+        for item in mostsim:
+            arr.append({"source": word, "target": item[0], "value": item[1]})
+            neighbors.append(item[0])
+
+        pairs = [
+            (neighbors[ab], neighbors[ba])
+            for ab in range(len(neighbors))
+            for ba in range(ab + 1, len(neighbors))
+        ]
+
+        for pair in pairs:
+            arr.append(
+                {"source": pair[0], "target": pair[1], "value": model.similarity(*pair)}
+            )
+    except:
+        return [arr, neighbors]
 
 
-def render(word, data, topn=10, interlinks=[], edge=1, d3path=""):
+def render(word, data, topn=10, threshold=0, interlinks=[], edge=1, d3path=""):
     return (
         html.replace("d3pathplaceholder", d3path)
         .replace("wordplaceholder", word)
         .replace("dataplaceholder", str(data))
         .replace("topn;", "topn = " + str(topn) + ";")
+        .replace("thresholdplaceholder", "threshold = " + str(threshold))
         .replace("linksplaceholder", "pages = " + str(interlinks))
         .replace("linkstrokewidth;", "linkstrokewidth = " + str(edge) + ";")
     )
 
 
-def vec2graph(path, model, words, depth=0, topn=10, edge=1, library="web"):
+def vec2graph(path, model, words, depth=0, topn=10, threshold=0, edge=1, library="web"):
     d3webpath = "https://d3js.org/d3.v3.min.js"
+    limit = threshold if threshold < 1 else threshold / 100
     data = {}
     if isinstance(words, list):
         for word in words:
@@ -206,6 +212,7 @@ def vec2graph(path, model, words, depth=0, topn=10, edge=1, library="web"):
                     page,
                     data[page],
                     topn=topn,
+                    threshold=limit,
                     interlinks=pages,
                     edge=edge,
                     d3path=d3path,
