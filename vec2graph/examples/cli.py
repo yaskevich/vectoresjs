@@ -1,12 +1,18 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
-import sys, os, glob, gensim, logging, pathlib, random, argparse
+
+import sys
+import os
+import glob
+import gensim
+import logging
+import pathlib
+import random
+import argparse
 from datetime import datetime
 
 dir = sys.path[0]
 sys.path.insert(0, os.path.dirname(dir))
-
+# is needed to import module from file (dev time solution)
 from genviz import *
 
 logging.basicConfig(
@@ -15,7 +21,10 @@ logging.basicConfig(
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "-t", "--token", help="token to query. If omitted, random token is used", default=""
+    "-t",
+    "--token",
+    help="token to look for in model. If omitted, random token is used",
+    default="",
 )
 parser.add_argument(
     "-n",
@@ -42,33 +51,46 @@ parser.add_argument(
 parser.add_argument(
     "-l",
     "--lim",
-    help="limit (threshold) of similarity which should be surpassed by neighbors to be rendered as connected."
-    " Scale is either more than 0 and less than 1 (as real range for similarities), or from 1 to 100 as percents"
-    " Default is 0 (minimally close items are linked)",
+    help="limit (threshold) of similarity which should be surpassed by"
+    " neighbors to be rendered as connected. Scale is either more "
+    "than 0 and less than 1 (as real range for similarities), or"
+    " from 1 to 100 as percents. Default is 0 (no link is cut)",
     default=0,
     type=float,
 )
 parser.add_argument(
     "-m",
     "--model",
-    help="path to vector model file. If ommited, first model with extension bin.gz (as binary) "
-    "or .vec.gz (as non-binary) in directory is loaded",
+    help="path to vector model file. If ommited, first model with extension "
+    "bin.gz (as binary) or .vec.gz (as non-binary) in working directory"
+    " is loaded",
     default="",
 )
 parser.add_argument(
     "-o",
     "--output",
-    help="path to ouptut directory where to store files of visualization. If ommited, in "
-    "current directory new one will be made, with a name based on a timestamp",
+    help="path to ouptut directory where to store files of visualization."
+    " If ommited, in current directory new one will be made, with a name"
+    " based on a timestamp",
     default="",
+)
+
+parser.add_argument(
+    "-s",
+    "--sep",
+    help="if this parameter is used, token is split by a separator (hyphen),"
+    " and only first part is shown in visualization (E.g. it is useful "
+    "when PoS is attached to a word). This parameter accepts no value",
+    action="store_true",
 )
 
 parser.add_argument(
     "-js",
     "--javascript",
-    help="path to D3.js library, can be 'web' (link to version at the D3.js site) or 'local'"
-    " (file in the directory with generated HTML, if not present, it is downloaded from web)."
-    " Default is 'web'",
+    help="path to D3.js library, can be 'web' (link to version at the D3.js "
+    "site) or 'local' (file in the directory with generated HTML, if not"
+    " present, it is downloaded from web). Default is 'web'",
+    choices=("web", "local"),
     default="web",
 )
 args = parser.parse_args()
@@ -90,6 +112,7 @@ model = gensim.models.KeyedVectors.load_word2vec_format(
 model.init_sims(replace=True)
 token = args.token if args.token else random.choice(model.index2entity)
 
+
 vec2graph(
     args.output,
     model,
@@ -98,5 +121,6 @@ vec2graph(
     topn=args.nbr,
     threshold=args.lim,
     edge=args.edge,
+    sep=args.sep,
     library=args.javascript,
 )

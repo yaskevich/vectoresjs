@@ -1,4 +1,6 @@
-import os, gensim, requests
+import sys
+import os
+import requests
 from requests.exceptions import HTTPError
 
 html = """<!DOCTYPE html>
@@ -15,6 +17,7 @@ html = """<!DOCTYPE html>
 document.addEventListener("DOMContentLoaded", function(e) {
   var width = 100, height = 100;
   var maincolor = "#F4B400";
+  var splithyphen;
   var linksplaceholder;
   var thresholdplaceholder;
   var topn;
@@ -51,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
       }
     });
     node.append("text").text(function(d) {
-      return d.name;
+      return splithyphen ? d.name.split("_")[0] : d.name;
     }).on("click", function(d) {
       if (d.page) {
         window.open(d.name + ".html");
@@ -114,6 +117,10 @@ def get_data(model, word, depth=0, topn=10):
 
     if not word:
         raise ValueError("empty string")
+    if "gensim" in sys.modules:
+        if word not in model.vocab:
+            print(word + " is not in model")
+            return datum
     res = get_most_similar(model, word, topn)
     datum[word] = res[0]
     get_neighbors(model, datum, res[1], depth, topn)
@@ -124,42 +131,44 @@ def get_data(model, word, depth=0, topn=10):
 def get_neighbors(model, datum, stack, depth, topn):
     if depth > 0:
         depth -= 1
-
         for neighbor in stack:
+
             res = get_most_similar(model, neighbor, topn)
             datum[neighbor] = res[0]
             get_neighbors(model, datum, res[1], depth, topn)
     return
 
 
-def get_most_similar(model, word, topn=10):
+def get_most_similar(model, word, topn=10, function="similar_by_word"):
     arr = [{"source": word, "target": word, "value": 1}]
     neighbors = []
-    try:
-        mostsim = model.similar_by_word(word, topn=topn)
 
-        for item in mostsim:
-            arr.append({"source": word, "target": item[0], "value": item[1]})
-            neighbors.append(item[0])
+    mostsim = getattr(model, function)(word, topn=topn)
 
-        pairs = [
-            (neighbors[ab], neighbors[ba])
-            for ab in range(len(neighbors))
-            for ba in range(ab + 1, len(neighbors))
-        ]
-        for pair in pairs:
-            arr.append(
-                {"source": pair[0], "target": pair[1], "value": model.similarity(*pair)}
-            )
-    except:
-        pass
+    for item in mostsim:
+        arr.append({"source": word, "target": item[0], "value": item[1]})
+        neighbors.append(item[0])
+
+    pairs = [
+        (neighbors[ab], neighbors[ba])
+        for ab in range(len(neighbors))
+        for ba in range(ab + 1, len(neighbors))
+    ]
+    for pair in pairs:
+        arr.append(
+            {"source": pair[0], "target": pair[1], "value": model.similarity(*pair)}
+        )
+
     return [arr, neighbors]
 
 
-def render(word, data, topn=10, threshold=0, interlinks=[], edge=1, d3path=""):
+def render(
+    word, data, topn=10, threshold=0, interlinks=[], edge=1, sep=False, d3path=""
+):
     return (
         html.replace("d3pathplaceholder", d3path)
         .replace("wordplaceholder", word)
+        .replace("splithyphen;", "splithyphen = " + str(sep).lower() + ";")
         .replace("dataplaceholder", str(data))
         .replace("topn;", "topn = " + str(topn) + ";")
         .replace("thresholdplaceholder", "threshold = " + str(threshold))
@@ -168,7 +177,9 @@ def render(word, data, topn=10, threshold=0, interlinks=[], edge=1, d3path=""):
     )
 
 
-def vec2graph(path, model, words, depth=0, topn=10, threshold=0, edge=1, library="web"):
+def vec2graph(
+    path, model, words, depth=0, topn=10, threshold=0, edge=1, sep=False, library="web"
+):
     d3webpath = "https://d3js.org/d3.v3.min.js"
     limit = threshold if threshold < 1 else threshold / 100
     data = {}
@@ -213,6 +224,7 @@ def vec2graph(path, model, words, depth=0, topn=10, threshold=0, edge=1, library
                     threshold=limit,
                     interlinks=pages,
                     edge=edge,
+                    sep=sep,
                     d3path=d3path,
                 )
             )
