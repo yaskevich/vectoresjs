@@ -18,19 +18,35 @@ parser.add_argument(
     "-t", "--token", help="token to query. If omitted, random token is used", default=""
 )
 parser.add_argument(
-    "-n", "--nbr", help="amount of neighbors to show. Default is 10", default=10
+    "-n",
+    "--nbr",
+    help="amount of neighbors to show. Default is 10",
+    default=10,
+    type=int,
 )
 parser.add_argument(
     "-e",
     "--edge",
     help="width of an edge (link) between nodes. Default is 1",
     default=1,
+    type=int,
 )
 parser.add_argument(
     "-d",
     "--depth",
-    help="recursion depth to build graphs also of neighbors of target word. Default is 0",
+    help="recursion depth to build graphs also of neighbors of target word."
+    " Default is 0 (no neighbors)",
     default=0,
+    type=int,
+)
+parser.add_argument(
+    "-l",
+    "--lim",
+    help="limit (threshold) of similarity which should be surpassed by neighbors to be rendered as connected."
+    " Scale is either more than 0 and less than 1 (as real range for similarities), or from 1 to 100 as percents"
+    " Default is 0 (minimally close items are linked)",
+    default=0,
+    type=float,
 )
 parser.add_argument(
     "-m",
@@ -48,9 +64,9 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-l",
-    "--library",
-    help="path to d3.js library, can be 'web' (link to version at the d3js site) or 'local'"
+    "-js",
+    "--javascript",
+    help="path to D3.js library, can be 'web' (link to version at the D3.js site) or 'local'"
     " (file in the directory with generated HTML, if not present, it is downloaded from web)."
     " Default is 'web'",
     default="web",
@@ -70,6 +86,17 @@ if not args.model:
 model = gensim.models.KeyedVectors.load_word2vec_format(
     args.model, binary=args.model.endswith(".bin.gz")
 )
+
 model.init_sims(replace=True)
 token = args.token if args.token else random.choice(model.index2entity)
-vec2graph(args.output, model, token, args.depth, args.nbr, args.edge, args.library)
+
+vec2graph(
+    args.output,
+    model,
+    token,
+    depth=args.depth,
+    topn=args.nbr,
+    threshold=args.lim,
+    edge=args.edge,
+    library=args.javascript,
+)
