@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import sys
 import os
 import glob
@@ -8,12 +7,16 @@ import logging
 import pathlib
 import random
 import argparse
+import zipfile
 from datetime import datetime
+import time
 
 dir = sys.path[0]
 sys.path.insert(0, os.path.dirname(dir))
 # is needed to import module from file (dev time solution)
 from genviz import *
+
+time_start = time.monotonic()
 
 logging.basicConfig(
     format="%(asctime)s : %(levelname)s : %(message)s", level=logging.INFO
@@ -78,9 +81,10 @@ parser.add_argument(
 parser.add_argument(
     "-s",
     "--sep",
-    help="if this parameter is used, token is split by a separator (hyphen),"
-    " and only first part is shown in visualization (E.g. it is useful "
-    "when PoS is attached to a word). This parameter accepts no value",
+    help="if this parameter is used, token is split by a separator"
+    "(underscore), and only first part is shown in visualization (E.g. "
+    "it is useful when PoS is attached to a word). By now, this "
+    "parameter accepts no value",
     action="store_true",
 )
 
@@ -105,13 +109,19 @@ if not args.model:
     first = glob.glob(os.path.join(dir, "*.[vecbin]*.gz"))[0]
     args.model = first
 
-model = gensim.models.KeyedVectors.load_word2vec_format(
-    args.model, binary=args.model.endswith(".bin.gz")
-)
+if args.model.endswith(".zip"):
+    with zipfile.ZipFile(args.model, "r") as archive:
+        args.model = archive.open("model.bin")
+        binaryMode = True
+else:
+    binaryMode = args.model.endswith(".bin.gz")
+
+model = gensim.models.KeyedVectors.load_word2vec_format(args.model, binary=binaryMode)
 
 model.init_sims(replace=True)
 token = args.token if args.token else random.choice(model.index2entity)
 
+time_load = time.monotonic()
 
 vec2graph(
     args.output,
@@ -124,3 +134,8 @@ vec2graph(
     sep=args.sep,
     library=args.javascript,
 )
+time_end  = time.monotonic()
+
+interval_load = time_load - time_start
+interval_data  = time_end - time_load
+print("Model load time:\t", round(interval_load, 2), " sec\nModel query time:\t", round(interval_data, 2), " sec")
