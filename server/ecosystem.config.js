@@ -1,7 +1,7 @@
 module.exports = {
   apps : [
       {
-        name: "vectores",
+        name: "vector",
         script: "./index.js",
         watch: false,
         instance_var: 'INSTANCE_ID',
