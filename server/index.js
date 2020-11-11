@@ -19,7 +19,9 @@ var db = new loki('vectores.db', {
 });
 
 
-app.use(express.static('../'))
+const static_path = path.join(__dirname, '..', 'static');
+
+app.use(express.static(static_path))
 app.use(express.static('./node_modules/mini.css/dist'))
 // implement the autoloadback referenced in loki constructor
 function databaseInitialize() {
@@ -41,7 +43,7 @@ app.get('/',
 // require('connect-ensure-login').ensureLoggedIn(),
 function(req, res){
 	// logger.log("info", req.headers['user-agent']);
-res.sendFile(path.join(__dirname, '../vectoresjs/index.html'));
+res.sendFile(path.join(static_path, 'index.html'));
 }); 
 
 
@@ -54,12 +56,12 @@ app.get('/last',
 			// console.log(dbres);
 			res.send(dbres.data);
 		} else {
-			res.sendFile(path.join(__dirname, '../vectoresjs/def.json'));
+			res.sendFile(path.join(static_path, 'def.json'));
 		}
 }); 
 
 app.get('/def', function(req, res){
-	res.sendFile(path.join(__dirname, '../vectoresjs/data.json'));
+	res.sendFile(path.join(static_path, 'data.json'));
 }); 
 
 app.get('/syn',
