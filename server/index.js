@@ -6,7 +6,6 @@ const fs = require('fs')
 const path = require('path')  
 const axios = require('axios')
 const bodyParser = require('body-parser');
-const morgan = require('morgan')
 const loki = require('lokijs')
 const port = 3434;
 app.use(express.static('maps'))
@@ -80,10 +79,10 @@ app.get('/syn',
 		const dbres = db.getCollection("entries").find({ word :word });
 		// console.log("db", word, dbres.length);
 		
-		// let model = "ruscorpora_upos_cbow_300_20_2019";
-		let model = "tayga_upos_skipgram_300_2_2019";
-		let format  = "json";
-		let newurl =  urljoin('https://rusvectores.org', model, encodeURIComponent(word), 'api', format)
+		const model = "ruscorpora_upos_cbow_300_20_2019";
+		// let model = "tayga_upos_skipgram_300_2_2019";
+		const format  = "json";
+		const newurl =  urljoin('https://rusvectores.org', model, encodeURIComponent(word), 'api', format)
 		
 	// logger.log("info", req.headers['user-agent']);
 	
