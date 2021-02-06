@@ -1,0 +1,673 @@
+{
+     "rusvectores": {
+          "tayga_lemmas_elmo_2048_2019": {
+               "Persistent identifier": "tayga_lemmas_elmo_2048_2019",
+               "Download": {
+                    "data": "1.7 Gbytes",
+                    "link": "http://vectors.nlpl.eu/repository/20/199.zip"
+               },
+               "Algorithm": {
+                    "data": "ELMo",
+                    "link": "https://t.me/s/rusvectores/25"
+               },
+               "Corpus": "Taiga (lemmas)",
+               "Corpus size": "near 5 billion words",
+               "Tagset": "None",
+               "Vector size": "2048",
+               "RUSSE'18": "0.93",
+               "ParaPhraser": "0.54",
+               "Creation date": "December 2019",
+               "title": "Contextualized embeddings",
+               "language": "ru"
+          },
+          "ruwikiruscorpora_tokens_elmo_1024_2019": {
+               "Persistent identifier": "ruwikiruscorpora_tokens_elmo_1024_2019",
+               "Download": {
+                    "data": "197 Mbytes",
+                    "link": "http://vectors.nlpl.eu/repository/20/195.zip"
+               },
+               "Algorithm": {
+                    "data": "ELMo",
+                    "link": "https://t.me/s/rusvectores/25"
+               },
+               "Corpus": "RNC and Wikipedia December 2018 (tokens)",
+               "Corpus size": "989 million words",
+               "Tagset": "None",
+               "Vector size": "1024",
+               "RUSSE'18": "0.88",
+               "ParaPhraser": "0.55",
+               "Creation date": "August 2019",
+               "title": "Contextualized embeddings",
+               "language": "ru"
+          },
+          "ruwikiruscorpora_lemmas_elmo_1024_2019": {
+               "Persistent identifier": "ruwikiruscorpora_lemmas_elmo_1024_2019",
+               "Download": {
+                    "data": "197 Mbytes",
+                    "link": "http://vectors.nlpl.eu/repository/20/196.zip"
+               },
+               "Algorithm": {
+                    "data": "ELMo",
+                    "link": "https://t.me/s/rusvectores/25"
+               },
+               "Corpus": "RNC and Wikipedia December 2018 (lemmas)",
+               "Corpus size": "989 million words",
+               "Tagset": "None",
+               "Vector size": "1024",
+               "RUSSE'18": "0.91",
+               "ParaPhraser": "0.57",
+               "Creation date": "August 2019",
+               "title": "Contextualized embeddings",
+               "language": "ru"
+          },
+          "ruscorpora_upos_cbow_300_20_2019": {
+               "Persistent identifier": "ruscorpora_upos_cbow_300_20_2019",
+               "Download": {
+                    "data": "462 Mbytes",
+                    "link": "http://vectors.nlpl.eu/repository/20/180.zip"
+               },
+               "Corpus": "RNC",
+               "Corpus size": "270 million words",
+               "Vocabulary size": "189 193",
+               "Frequency threshold": "5 (max vocab size 250K)",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Bag-of-Words",
+               "Vector size": "300",
+               "Window size": "20",
+               "SimLex965": "0.36",
+               "Google Analogies": "0.60",
+               "Creation date": "January 2019",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruwikiruscorpora_upos_skipgram_300_2_2019": {
+               "Persistent identifier": "ruwikiruscorpora_upos_skipgram_300_2_2019",
+               "Download": {
+                    "data": "608 Mbytes",
+                    "link": "http://vectors.nlpl.eu/repository/20/182.zip"
+               },
+               "Corpus": "RNC and Wikipedia December 2018",
+               "Corpus size": "788 million words",
+               "Vocabulary size": "248 978",
+               "Frequency threshold": "5 (max vocab size 250K)",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "2",
+               "SimLex965": "0.32",
+               "Google Analogies": "0.72",
+               "Creation date": "January 2019",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "tayga_upos_skipgram_300_2_2019": {
+               "Persistent identifier": "tayga_upos_skipgram_300_2_2019",
+               "Download": {
+                    "data": "610 Mbytes",
+                    "link": "http://vectors.nlpl.eu/repository/20/185.zip"
+               },
+               "Corpus": "Taiga",
+               "Corpus size": "near 5 billion words",
+               "Vocabulary size": "249 565",
+               "Frequency threshold": "5 (max vocab size 250K)",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "2",
+               "SimLex965": "0.42",
+               "Google Analogies": "0.58",
+               "Creation date": "January 2019",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "tayga_none_fasttextcbow_300_10_2019": {
+               "Persistent identifier": "tayga_none_fasttextcbow_300_10_2019",
+               "Download": {
+                    "data": "2.6 Gbytes",
+                    "link": "http://vectors.nlpl.eu/repository/20/187.zip"
+               },
+               "Corpus": "Taiga",
+               "Corpus size": "near 5 billion words",
+               "Vocabulary size": "192 415",
+               "Frequency threshold": "5 (max vocab size 250K)",
+               "Tagset": "None",
+               "Algorithm": "fastText CBOW (3..5-grams)",
+               "Vector size": "300",
+               "Window size": "10",
+               "SimLex965": "0.37",
+               "Google Analogies": "0.71",
+               "Creation date": "January 2019",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "news_upos_skipgram_300_5_2019": {
+               "Persistent identifier": "news_upos_skipgram_300_5_2019",
+               "Download": {
+                    "data": "611 Mbytes",
+                    "link": "http://vectors.nlpl.eu/repository/20/184.zip"
+               },
+               "Corpus": "Russian News texts",
+               "Corpus size": "2.6 billion words",
+               "Vocabulary size": "249 318",
+               "Frequency threshold": "5 (max vocab size 250K)",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "5",
+               "SimLex965": "0.22",
+               "Google Analogies": "0.51",
+               "Creation date": "January 2019",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "araneum_none_fasttextcbow_300_5_2018": {
+               "Persistent identifier": "araneum_none_fasttextcbow_300_5_2018",
+               "Download": {
+                    "data": "2.6 Gbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores4/fasttext/araneum_none_fasttextcbow_300_5_2018.tgz"
+               },
+               "Corpus": "Araneum",
+               "Corpus size": "about 10 billion words",
+               "Vocabulary size": "195 782",
+               "Frequency threshold": "400",
+               "Tagset": "None",
+               "Algorithm": "fastText CBOW (3...5-grams)",
+               "Vector size": "300",
+               "Window size": "5",
+               "SimLex965": "0.35",
+               "Google Analogies": "0.73",
+               "Creation date": "March 2018",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruscorpora_none_fasttextskipgram_300_2_2019": {
+               "Persistent identifier": "ruscorpora_none_fasttextskipgram_300_2_2019",
+               "Download": {
+                    "data": "2.4 Gbytes",
+                    "link": "http://vectors.nlpl.eu/repository/20/181.zip"
+               },
+               "Corpus": "RNC",
+               "Corpus size": "270 million words",
+               "Vocabulary size": "164 996",
+               "Frequency threshold": "5 (max vocab size 250K)",
+               "Tagset": "None",
+               "Algorithm": "fastText Skipgram (3..5-grams)",
+               "Vector size": "300",
+               "Window size": "2",
+               "SimLex965": "0.39",
+               "Google Analogies": "0.63",
+               "Creation date": "January 2019",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruwikiruscorpora-func_upos_skipgram_300_5_2019": {
+               "Persistent identifier": "ruwikiruscorpora-func_upos_skipgram_300_5_2019",
+               "Download": {
+                    "data": "606 Mbytes",
+                    "link": "http://vectors.nlpl.eu/repository/20/183.zip"
+               },
+               "Corpus": "RNC and Wikipedia December 2018 (including functional words)",
+               "Corpus size": "788 million words",
+               "Vocabulary size": "248 118",
+               "Frequency threshold": "5 (max vocab size 250K)",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "5",
+               "SimLex965": "0.32",
+               "Google Analogies": "0.71",
+               "Creation date": "January 2019",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "tayga-func_upos_skipgram_300_5_2019": {
+               "Persistent identifier": "tayga-func_upos_skipgram_300_5_2019",
+               "Download": {
+                    "data": "611 Mbytes",
+                    "link": "http://vectors.nlpl.eu/repository/20/186.zip"
+               },
+               "Corpus": "Taiga (including functional words)",
+               "Corpus size": "near 5 billion words",
+               "Vocabulary size": "249 946",
+               "Frequency threshold": "5 (max vocab size 250K)",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "5",
+               "SimLex965": "0.41",
+               "Google Analogies": "0.57",
+               "Creation date": "January 2019",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "taiga_upos_skipgram_300_2_2018": {
+               "Persistent identifier": "taiga_upos_skipgram_300_2_2018",
+               "Download": {
+                    "data": "331 Mbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores4/taiga/taiga_upos_skipgram_300_2_2018.vec.gz"
+               },
+               "Corpus": "Taiga",
+               "Corpus size": "near 5 billion words",
+               "Vocabulary size": "237 255",
+               "Frequency threshold": "200",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "2",
+               "SimLex965": "0.41",
+               "Google Analogies": "0.53",
+               "Creation date": "June 2018",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruscorpora_upos_skipgram_300_5_2018": {
+               "Persistent identifier": "ruscorpora_upos_skipgram_300_5_2018",
+               "Download": {
+                    "data": "191 Mbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores4/RNC/ruscorpora_upos_skipgram_300_5_2018.vec.gz"
+               },
+               "Corpus": "RNC",
+               "Corpus size": "250 million words",
+               "Vocabulary size": "195 071",
+               "Frequency threshold": "20",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "5",
+               "SimLex965": "0.37",
+               "Google Analogies": "0.58",
+               "Creation date": "January 2018",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruwikiruscorpora_upos_skipgram_300_2_2018": {
+               "Persistent identifier": "ruwikiruscorpora_upos_skipgram_300_2_2018",
+               "Download": {
+                    "data": "376 Mbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores4/ruwikiruscorpora/ruwikiruscorpora_upos_skipgram_300_2_2018.vec.gz"
+               },
+               "Corpus": "RNC and  Wikipedia  December 2017",
+               "Corpus size": "600 million words",
+               "Vocabulary size": "384 764",
+               "Frequency threshold": "40",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "2",
+               "SimLex965": "0.34",
+               "Google Analogies": "0.70",
+               "Creation date": "January 2018",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "news_upos_cbow_600_2_2018": {
+               "Persistent identifier": "news_upos_cbow_600_2_2018",
+               "Download": {
+                    "data": "547 Mbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores4/news/news_upos_cbow_600_2_2018.vec.gz"
+               },
+               "Corpus": "Russian news, from September 2013 until November 2016",
+               "Corpus size": "near 5 billion words",
+               "Vocabulary size": "289 191",
+               "Frequency threshold": "200",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Bag-of-Words",
+               "Vector size": "600",
+               "Window size": "2",
+               "SimLex965": "0.35",
+               "Google Analogies": "0.46",
+               "Creation date": "January 2018",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "araneum_upos_skipgram_300_2_2018": {
+               "Persistent identifier": "araneum_upos_skipgram_300_2_2018",
+               "Download": {
+                    "data": "192 Mbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores4/araneum/araneum_upos_skipgram_300_2_2018.vec.gz"
+               },
+               "Corpus": "Araneum",
+               "Corpus size": "about 10 billion words",
+               "Vocabulary size": "196 620",
+               "Frequency threshold": "400",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "2",
+               "SimLex965": "0.38",
+               "Google Analogies": "0.65",
+               "Creation date": "January 2018",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "araneum_none_fasttextskipgram_300_5_2018": {
+               "Persistent identifier": "araneum_none_fasttextskipgram_300_5_2018",
+               "Download": {
+                    "data": "2.5 Gbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores4/fasttext/araneum_none_fasttextskipgram_300_5_2018.tgz"
+               },
+               "Corpus": "Araneum",
+               "Corpus size": "about 10 billion words",
+               "Vocabulary size": "195 782",
+               "Frequency threshold": "400",
+               "Tagset": "None",
+               "Algorithm": "fastText Skipgram (3-grams)",
+               "Vector size": "300",
+               "Window size": "5",
+               "SimLex965": "0.36",
+               "Google Analogies": "0.71",
+               "Creation date": "January 2018",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruwikiruscorpora-nobigrams_upos_skipgram_300_5_2018": {
+               "Persistent identifier": "ruwikiruscorpora-nobigrams_upos_skipgram_300_5_2018",
+               "Download": {
+                    "data": "385 Mbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores4/unigrams/ruwikiruscorpora-nobigrams_upos_skipgram_300_5_2018.vec.gz"
+               },
+               "Corpus": "RNC and  Wikipedia  December 2017 (without merging bigrams)",
+               "Corpus size": "600 million words",
+               "Vocabulary size": "394 332",
+               "Frequency threshold": "40",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "5",
+               "SimLex965": "0.31",
+               "Google Analogies": "0.72",
+               "Creation date": "January 2018",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruwikiruscorpora-superbigrams_skipgram_300_2_2018": {
+               "Persistent identifier": "ruwikiruscorpora-superbigrams_skipgram_300_2_2018",
+               "Download": {
+                    "data": "735 Mbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores4/superbigrams/ruwikiruscorpora-superbigrams_skipgram_300_2_2018.vec.gz"
+               },
+               "Corpus": "RNC and  Wikipedia  December 2017 (unlimited bigram merging)",
+               "Corpus size": "600 million words",
+               "Vocabulary size": "746 695",
+               "Frequency threshold": "40",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "2",
+               "SimLex965": "0.28",
+               "Google Analogies": "0.71",
+               "Creation date": "January 2018",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruscorpora_upos_skipgram_300_10_2017": {
+               "Persistent identifier": "ruscorpora_upos_skipgram_300_10_2017",
+               "Download": {
+                    "data": "200 Mbytes",
+                    "link": "https://rusvectores.org/static/models/ruscorpora_upos_skipgram_300_10_2017.bin.gz"
+               },
+               "Corpus": "RNC",
+               "Corpus size": "250 million words",
+               "Vocabulary size": "184 973",
+               "Frequency threshold": "10",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "300",
+               "Window size": "10",
+               "SimLex965": "0.35",
+               "Google Analogies": "0.65",
+               "Creation date": "January 2017",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruwikiruscorpora_upos_cbow_300_20_2017": {
+               "Persistent identifier": "ruwikiruscorpora_upos_cbow_300_20_2017",
+               "Download": {
+                    "data": "420 Mbytes",
+                    "link": "https://rusvectores.org/static/models/ruwikiruscorpora_upos_cbow_300_20_2017.bin.gz"
+               },
+               "Corpus": "RNC and  Wikipedia  November 2016",
+               "Corpus size": "600 million words",
+               "Vocabulary size": "392 339",
+               "Frequency threshold": "15",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Bag-of-Words",
+               "Vector size": "300",
+               "Window size": "20",
+               "SimLex965": "0.33",
+               "Google Analogies": "0.70",
+               "Creation date": "January 2017",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "web_upos_cbow_300_20_2017": {
+               "Persistent identifier": "web_upos_cbow_300_20_2017",
+               "Download": {
+                    "data": "290 Mbytes",
+                    "link": "https://rusvectores.org/static/models/web_upos_cbow_300_20_2017.bin.gz"
+               },
+               "Corpus": "Web corpus December 2014",
+               "Corpus size": "900 million words",
+               "Vocabulary size": "267 540",
+               "Frequency threshold": "30",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Bag-of-Words",
+               "Vector size": "300",
+               "Window size": "20",
+               "SimLex965": "0.32",
+               "Google Analogies": "0.67",
+               "Creation date": "January 2017",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "news_upos_cbow_300_2_2017": {
+               "Persistent identifier": "news_upos_cbow_300_2_2017",
+               "Download": {
+                    "data": "130 Mbytes",
+                    "link": "https://rusvectores.org/static/models/news_upos_cbow_300_2_2017.bin.gz"
+               },
+               "Corpus": "Russian news, from September 2013 until November 2016",
+               "Corpus size": "near 5 billion words",
+               "Vocabulary size": "194 058",
+               "Frequency threshold": "200",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Bag-of-Words",
+               "Vector size": "300",
+               "Window size": "2",
+               "SimLex965": "0.33",
+               "Google Analogies": "0.42",
+               "Creation date": "February 2017",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "araneum_upos_skipgram_600_2_2017": {
+               "Persistent identifier": "araneum_upos_skipgram_600_2_2017",
+               "Download": {
+                    "data": "419 Mbytes",
+                    "link": "https://rusvectores.org/static/models/araneum_upos_skipgram_600_2_2017.bin.gz"
+               },
+               "Corpus": "Araneum",
+               "Corpus size": "about 10 billion words",
+               "Vocabulary size": "196 465",
+               "Frequency threshold": "400",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "600",
+               "Window size": "2",
+               "SimLex965": "0.41",
+               "Google Analogies": "0.59",
+               "Creation date": "June 2017",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruscorpora_upos_skipgram_600_10_2017": {
+               "Persistent identifier": "ruscorpora_upos_skipgram_600_10_2017",
+               "Download": {
+                    "data": "371 Mbytes",
+                    "link": "https://rusvectores.org/static/models/ruscorpora_upos_skipgram_600_10_2017.bin.gz"
+               },
+               "Corpus": "RNC",
+               "Corpus size": "250 million words",
+               "Vocabulary size": "173 816",
+               "Frequency threshold": "10",
+               "Tagset": {
+                    "data": "Universal Tags",
+                    "link": "http://universaldependencies.org/u/pos/all.html"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "600",
+               "Window size": "2",
+               "SimLex965": "0.43",
+               "Google Analogies": "0.29",
+               "Creation date": "June 2017",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruscorpora_mystem_cbow_300_2_2015": {
+               "Persistent identifier": "ruscorpora_mystem_cbow_300_2_2015",
+               "Download": {
+                    "data": "303 Mbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores2/ruscorpora_mystem_cbow_300_2_2015.bin.gz"
+               },
+               "Corpus": "RNC",
+               "Corpus size": "107 million words",
+               "Vocabulary size": "281 776",
+               "Frequency threshold": "3",
+               "Tagset": {
+                    "data": "Mystem",
+                    "link": "https://tech.yandex.ru/mystem/doc/grammemes-values-docpage/#parts"
+               },
+               "Algorithm": "Continuous Bag-of-Words",
+               "Vector size": "300",
+               "Window size": "2",
+               "SimLex965": "0.38",
+               "Google Analogies": "0.27",
+               "Creation date": "December 2015",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "ruwikiruscorpora_mystem_cbow_500_2_2015": {
+               "Persistent identifier": "ruwikiruscorpora_mystem_cbow_500_2_2015",
+               "Download": {
+                    "data": "1100 Mbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores2/ruwikiruscorpora_mystem_cbow_500_2_2015.bin.gz"
+               },
+               "Corpus": "RNC and Wikipedia  2015",
+               "Corpus size": "280 million words",
+               "Vocabulary size": "604 043",
+               "Frequency threshold": "5",
+               "Tagset": {
+                    "data": "Mystem",
+                    "link": "https://tech.yandex.ru/mystem/doc/grammemes-values-docpage/#parts"
+               },
+               "Algorithm": "Continuous Bag-of-Words",
+               "Vector size": "500",
+               "Window size": "2",
+               "SimLex965": "0.38",
+               "Google Analogies": "0.38",
+               "Creation date": "March 2015",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "web_mystem_skipgram_500_2_2015": {
+               "Persistent identifier": "web_mystem_skipgram_500_2_2015",
+               "Download": {
+                    "data": "630 Mbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores2/web_mystem_skipgram_500_2_2015.bin.gz"
+               },
+               "Corpus": "Web corpus, December 2014",
+               "Corpus size": "660 million words",
+               "Vocabulary size": "353 608",
+               "Frequency threshold": "30",
+               "Tagset": {
+                    "data": "Mystem",
+                    "link": "https://tech.yandex.ru/mystem/doc/grammemes-values-docpage/#parts"
+               },
+               "Algorithm": "Continuous Skipgram",
+               "Vector size": "500",
+               "Window size": "2",
+               "SimLex965": "0.31",
+               "Google Analogies": "0.52",
+               "Creation date": "November 2015",
+               "title": "Static embeddings",
+               "language": "ru"
+          },
+          "news_mystem_skipgram_1000_20_2015": {
+               "Persistent identifier": "news_mystem_skipgram_1000_20_2015",
+               "Download": {
+                    "data": "525 Mbytes",
+                    "link": "https://rusvectores.org/static/models/rusvectores2/news_mystem_skipgram_1000_20_2015.bin.gz"
+               },
+               "Corpus": "Russian news, from September 2013 to October 2015",
+               "Corpus size": "2.5 billion words",
+               "Vocabulary size": "147 358",
+               "Frequency threshold": "200",
+               "Tagset": {
+                    "data": "Mystem",
+                    "link": "https://tech.yandex.ru/mystem/doc/grammemes-values-docpage/#parts"
+               },
+               "Algorithm": "Continuous Skip-Gram",
+               "Vector size": "1000",
+               "Window size": "20",
+               "SimLex965": "0.32",
+               "Google Analogies": "0.58",
+               "Creation date": "December 2015",
+               "title": "Static embeddings",
+               "language": "ru"
+          }
+     }
+}
