@@ -1,4 +1,6 @@
 'use strict';
+
+require('dotenv').config();
 const express = require('express');
 var urljoin = require('url-join');
 const app = express();
@@ -8,13 +10,13 @@ const axios = require('axios')
 const bodyParser = require('body-parser');
 const morgan = require('morgan')
 const loki = require('lokijs')
-const port = 3535;
-// app.use(express.static('maps'))
+const port = process.env.PORT || 4000;
 // app.use(morgan('combined'));
+const backendPort = process.env.APIPORT || 5000;
+const defaultModel = process.env.MODEL;
+const clientPath = path.join(__dirname, '..', 'front');
+// check the paths for PM2
 
-
-// ПРОПИСАТЬ ПУТИ ПРАВИЛЬНО, А ТО ПО АБСОЮТНОМУ ПУТИ ПМ НЕ МОЖЕТ КОРРЕКТНО ЗАПУСТИТЬ
-// !!!
 var db = new loki('vectores.db', {
     autoload: true,
     autoloadCallback : databaseInitialize,
@@ -23,7 +25,7 @@ var db = new loki('vectores.db', {
 });
 
 
-app.use(express.static('../vectoresjs'))
+app.use(express.static(clientPath))
 app.use(express.static('./node_modules/mini.css/dist'))
 // implement the autoloadback referenced in loki constructor
 function databaseInitialize() {
@@ -41,12 +43,9 @@ function runProgramLogic() {
   console.log("number of entries in database : " + entryCount);
 }
 
-app.get('/',
-// require('connect-ensure-login').ensureLoggedIn(),
-function(req, res){
-	// logger.log("info", req.headers['user-agent']);
-res.sendFile(path.join(__dirname, '../vectoresjs/index.html'));
-}); 
+// app.get('/', function(req, res){
+	// res.sendFile(path.join(clientPath, 'index.html'));
+// }); 
 
 
 app.get('/last',
@@ -58,12 +57,12 @@ app.get('/last',
 			// console.log(dbres);
 			res.send(dbres.data);
 		} else {
-			res.sendFile(path.join(__dirname, '../vectoresjs/def.json'));
+			res.sendFile(path.join(clientPath, 'def.json'));
 		}
 }); 
 
 app.get('/def', function(req, res){
-	res.sendFile(path.join(__dirname, '../vectoresjs/data.json'));
+	res.sendFile(path.join(clientPath, 'data.json'));
 }); 
 
 app.get('/syn',
@@ -94,32 +93,15 @@ app.get('/syn',
 	} else {
 		axios.get(newurl)
 		  .then(response => {
-			  //let obj = response.data;
-			  //obj = obj[Object.keys(obj)[0]];
-			  //obj = obj[Object.keys(obj)[0]];
-			// console.log(obj);
 			console.log(response.data);
 			db.getCollection("entries").insert( { word : word, wordpos: word, data: response.data } );
 			res.send(response.data);
-			
-			
-			// axios.all([
-			  // axios.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2017-08-03'),
-			  // axios.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2017-08-02')
-			// ]).then(axios.spread((response1, response2) => {
-			  // console.log(response1.data.url);
-			  // console.log(response2.data.url);
-			// })).catch(error => {
-			  // console.log(error);
-			// });
-			
 		  })
 		  .catch(error => {
 			console.log(error);
 			res.send({error});
 		  });
 	}
-	// res.send(JSON.stringify({value: newurl}));
 }); 
 
 app.get('/sim',
@@ -132,13 +114,13 @@ app.get('/sim',
 				word = wordIn;
 			}
 		}
-		const model = req.query["model"] || "ruscorpora_upos_cbow_300_20_2019";
+		const model = req.query["model"] || defaultModel;
 		//https://github.com/techfort/LokiJS/wiki
 		var dbres = db.getCollection("entries").find({ word :word });
 		// console.log("db", word, dbres.length);
 		
 		let format  = "json";
-		let newurl =  'http://localhost:5000/sim?m='+ model + "&w=" + encodeURIComponent(word);
+		let newurl =  'http://localhost:'+backendPort+'/sim?m='+ model + "&w=" + encodeURIComponent(word);
 		
 		console.log("query", newurl);
 	// logger.log("info", req.headers['user-agent']);
@@ -151,25 +133,9 @@ app.get('/sim',
 	} else {
 		axios.get(newurl)
 		  .then(response => {
-			  //let obj = response.data;
-			  //obj = obj[Object.keys(obj)[0]];
-			  //obj = obj[Object.keys(obj)[0]];
-			// console.log(obj);
 			console.log(response.data);
 			db.getCollection("entries").insert( { word : word, wordpos: word, data: response.data } );
 			res.send(response.data);
-			
-			
-			// axios.all([
-			  // axios.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2017-08-03'),
-			  // axios.get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2017-08-02')
-			// ]).then(axios.spread((response1, response2) => {
-			  // console.log(response1.data.url);
-			  // console.log(response2.data.url);
-			// })).catch(error => {
-			  // console.log(error);
-			// });
-			
 		  })
 		  .catch(error => {
 			console.log(error);
