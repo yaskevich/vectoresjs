@@ -104,6 +104,20 @@ app.get('/syn',
 	}
 }); 
 
+app.get('/status',
+	function(req, res){
+		const newurl = 'http://localhost:'+backendPort+'/status';
+		axios.get(newurl)
+		  .then(response => {
+			console.log(response.data);
+			res.sendStatus(response.status);
+		  })
+		  .catch(error => {
+			// console.log(error);
+			res.sendStatus(404);
+		  });
+	});
+
 app.get('/sim',
 	function(req, res){
 		let word  = "день";
