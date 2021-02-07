@@ -1,0 +1,254 @@
+{
+    "descriptions": {
+	
+	    "chats-w4-v300-n5-skipgram-339MB": {
+            "project": "belchats", "alg": "skipgram", "tool": "word2vec", "lang": "rus",
+            "src": [{ "title": "Chats - November (w4)" }]
+        },
+	    "chats-w3-v300-n5-skipgram-339MB": {
+            "project": "belchats", "alg": "skipgram", "tool": "word2vec", "lang": "rus",
+            "src": [{ "title": "Chats - November (w3)" }]
+        },
+	    "chats-w2-v300-n5-skipgram-339MB": {
+            "project": "belchats", "alg": "skipgram", "tool": "word2vec", "lang": "rus",
+            "src": [{ "title": "Chats - November (w2)" }]
+        },	    
+		"chats-w1-v300-n5-skipgram-339MB": {
+            "project": "belchats", "alg": "skipgram", "tool": "word2vec", "lang": "rus",
+            "src": [{ "title": "Chats - November (w1)" }]
+        },
+		
+        "tayga_upos_skipgram_300_2_2019": {
+            "tool": "Gensim",
+            "alg": "Gensim Continuous Skipgram",
+            "lang": "rus",
+            "project": "RusVectores",
+            "url": "https://rusvectores.org",
+
+            "src": [{
+                "title": "Taiga corpus",
+                "lang": "rus",
+                "NER": true,
+                "case": false,
+                "url": "https://tatianashavrina.github.io/taiga_site/",
+                "lem": true,
+                "stop": "functional PoS",
+                "morph": "UDPipe 1.2",
+                "pos": "UPoS",
+                "tokens": 4867000000
+            }]
+        },
+        "tayga-func_upos_skipgram_300_5_2019": {
+            "tool": "Gensim",
+            "alg": "Gensim Continuous Skipgram",
+            "lang": "rus",
+            "project": "RusVectores",
+            "url": "https://rusvectores.org",
+
+            "src": [{
+                "title": "Taiga corpus",
+                "lang": "rus",
+                "NER": true,
+                "case": false,
+                "url": "https://tatianashavrina.github.io/taiga_site/",
+                "lem": true,
+                "stop": null,
+                "morph": "UDPipe 1.2",
+                "pos": "UPoS",
+                "tokens": 4867000000
+            }]
+        },
+        "ruwikiruscorpora_upos_skipgram_300_2_2019": {
+            "tool": "Gensim",
+            "alg": "Gensim Continuous Skipgram",
+            "lang": "rus",
+            "project": "RusVectores",
+            "url": "https://rusvectores.org",
+
+            "src": [{
+                    "title": "Russian National Corpus",
+                    "url": "http://ruscorpora.ru/",
+                    "lem": true,
+                    "case": false,
+                    "NER": true,
+                    "stop": "functional PoS",
+                    "morph": "UDPipe 1.2",
+                    "pos": "UPoS",
+                    "tokens": 270000000
+                },
+                {
+                    "title": "Russian Wikipedia dump of December 2018",
+                    "url": "https://dumps.wikimedia.org/",
+                    "lem": true,
+                    "NER": true,
+                    "case": false,
+                    "stop": "functional PoS",
+                    "morph": "UDPipe 1.2",
+                    "pos": "UPoS",
+                    "tokens": 518531000,
+                    "tool": "https://github.com/RaRe-Technologies/gensim/blob/master/gensim/scripts/segment_wiki.py"
+                }
+            ]
+        },
+        "ruwikiruscorpora-func_upos_skipgram_300_5_2019": {
+            "tool": "Gensim",
+            "alg": "Gensim Continuous Skipgram",
+            "lang": "rus",
+            "project": "RusVectores",
+            "url": "https://rusvectores.org",
+
+            "src": [{
+                    "title": "Russian National Corpus",
+                    "url": "http://ruscorpora.ru/",
+                    "lem": true,
+                    "case": false,
+                    "NER": true,
+                    "stop": null,
+                    "morph": "UDPipe 1.2",
+                    "pos": "UPoS",
+                    "tokens": 270000000
+                },
+                {
+                    "title": "Russian Wikipedia dump of December 2018",
+                    "url": "https://dumps.wikimedia.org/",
+                    "lem": true,
+                    "NER": true,
+                    "case": false,
+                    "stop": null,
+                    "pos": "UPoS",
+                    "tokens": 518531000,
+                    "tool": "https://github.com/RaRe-Technologies/gensim/blob/master/gensim/scripts/segment_wiki.py"
+                }
+            ]
+        },
+        "news_upos_skipgram_300_5_2019": {
+            "tool": "Gensim",
+            "alg": "Gensim Continuous Skipgram",
+            "project": "RusVectores",
+            "url": "https://rusvectores.org",
+            "lang": "rus",
+            "external_id": "news_upos_skipgram_300_5_2019",
+            "handle": "http://vectors.nlpl.eu/repository/20/184.zip",
+            "id": 184,
+            "iterations": 10,
+            "vocabulary size": 249318,
+            "window": 5,
+            "src": [{
+                "title": "Russian News",
+                "lem": true,
+                "case": false,
+                "NER": true,
+                "stop": "functional PoS",
+                "morph": "UDPipe 1.2",
+                "pos": "UPoS",
+                "tokens": 2550000000
+            }]
+        },
+        "ruscorpora_upos_cbow_300_20_2019": {
+            "tool": "Gensim",
+            "alg": "Gensim Continuous Bag-of-Words",
+            "project": "RusVectores",
+            "url": "https://rusvectores.org",
+            "lang": "rus",
+            "external_id": "ruscorpora_upos_cbow_300_20_2019",
+            "handle": "http://vectors.nlpl.eu/repository/20/180.zip",
+            "id": 180,
+            "iterations": 10,
+            "vocabulary size": 189193,
+            "window": 20,
+            "src": [{
+                "title": "Russian News",
+                "lem": true,
+                "case": false,
+                "NER": true,
+                "stop": "functional PoS",
+                "morph": "UDPipe 1.2",
+                "pos": "UPoS",
+                "tokens": 2550000000
+            }]
+        },
+        "GoogleNews-vectors-negative300": {
+            "project": "word2vec (Google)",
+            "alg": "skipgram?",
+            "url": "https://code.google.com/archive/p/word2vec/",
+            "handle": "https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz",
+            "vocabulary size": 3000000,
+            "tool": "word2vec",
+            "lang": "eng",
+            "src": [{
+                "title": "Google News (about 100 billion words)"
+            }]
+        },
+        "fiction.lowercased.lemmatized.word2vec.300d": {
+            "alg": "Word2Vec",
+            "dim": 300,
+            "lang": "ukr",
+            "project": "Lang-uk",
+            "url": "https://lang.org.ua",
+            "handle": "https://lang.org.ua/static/downloads/models/fiction.lowercased.lemmatized.word2vec.300d.bz2",
+            "src": [{
+                "lem": true,
+                "case": false,
+                "pos": null,
+                "title": "Fiction",
+                "src": "lang.org.ua",
+                "url": "https://lang.org.ua"
+            }]
+        },
+        "BulgarianCoNLL17": {
+            "alg": "Word2Vec",
+            "dim": 300,
+            "lang": "ukr",
+            "project": "vectors.nlpl.eu",
+            "url": "https://vectors.nlpl.eu",
+            "handle": "http://vectors.nlpl.eu/repository/20/33.zip",
+            "src": [{
+                "lem": false,
+                "case": false,
+                "pos": null,
+                "stops": null,
+                "title": "Bulgarian CoNLL17",
+                "src": "https://lindat.mff.cuni.cz",
+                "url": "https://https://lindat.mff.cuni.cz",
+                "tokens": 388433724
+            }]
+        }
+    },
+    "corpus": {
+        "rus": {
+            "iso": "rus",
+            "name": "Russian",
+            "n": 7,
+            "models": [
+                "tayga_upos_skipgram_300_2_2019", "tayga-func_upos_skipgram_300_5_2019", "ruwikiruscorpora_upos_skipgram_300_2_2019", "ruwikiruscorpora-func_upos_skipgram_300_5_2019", "news_upos_skipgram_300_5_2019", "ruscorpora_upos_cbow_300_20_2019"
+            ]
+        },
+        "ukr": {
+            "iso": "ukr",
+            "name": "Ukrainian",
+            "n": 1,
+            "models": [
+                "fiction.lowercased.lemmatized.word2vec.300d"
+            ]
+        },
+        "bul": {
+            "iso": "bul",
+            "name": "Bulgarian",
+            "n": 1,
+            "models": [
+                "BulgarianCoNLL17"
+            ]
+        },
+        "eng": {
+            "iso": "eng",
+            "n": 3,
+            "name": "English",
+            "models": ["GoogleNews-vectors-negative300"]
+        }, "xxx": {
+            "iso": "xxx",
+            "n": 3,
+            "name": "Custom",
+            "models": ["chats-w1-v300-n5-skipgram-339MB", "chats-w2-v300-n5-skipgram-339MB", "chats-w3-v300-n5-skipgram-339MB", "chats-w4-v300-n5-skipgram-339MB"]
+        }
+    }
+}

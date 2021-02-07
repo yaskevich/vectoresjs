@@ -1,35 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# ololo
 
-from flask import Flask
-from flask import make_response
-from flask import jsonify
-from flask import Flask, render_template
-from flask import Flask, request, send_from_directory
 import os
-# apt install python3-enchant
-# import enchant
 import sys
-import gensim, logging
 import requests
-
-# d = enchant.Dict("en_US")
-app = Flask(__name__, static_url_path='')
 import json
+from flask import Flask, request, send_file, jsonify, make_response
+import gensim, logging
 from pymagnitude import *
-# <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-# <title>400 Bad Request</title>
-# <h1>Bad Request</h1>
-# <p>The browser (or proxy) sent a request that this server could not understand.</p>
 
+app = Flask(__name__, static_url_path='')
+menu_json_path = os.path.join(app.root_path, 'menu.json')  
 
+with open(menu_json_path) as json_file: 
+    menu_json = json.load(json_file)
 
 # logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-
-
-# models["tayga-func_upos_skipgram_300_5_2019"] = 
 
 models = {}
 # # mod_dirs = [file for subdir, dirs, files in os.walk("models") for file in dirs]
@@ -96,19 +83,26 @@ def sim():
     if w:
         print(w)
         if "upos" in model_id:
-            r = requests.get('http://lindat.mff.cuni.cz/services/udpipe/api/process?tokenizer&tagger&parser&model=russian-syntagrus-ud-2.5-191206&data='+w)
+            print("get PoS")
+            # print(menu_json['descriptions'])
+            # https://lindat.mff.cuni.cz/services/udpipe/api-reference.php
+            r = requests.get('http://lindat.mff.cuni.cz/services/udpipe/api/process?tokenizer&tagger&parser&model=russian-syntagrus-ud-2.6-200830&data='+w)
             if r.status_code == 200:
-                datum = r.json()
-                res = datum["result"].split("\n")
-                gram = res[4].split("\t")
+                datum = r.json()                
+                res = list(map(lambda x: x.strip(), datum["result"].split("# ")))
+                print("res")
+                print(res)
+                gram = res[7].split("\t")
                 tag = gram[3]
                 lem = gram[2]
                 unit = f"{lem}_{tag}"
         else:
+            print("no PoS")
             unit = w
+        print("querying model...")
         # sim = model.similar_by_word(unit, topn=topn)  # gensim
         sim = models[model_id].most_similar(unit, topn = 10)
-        print(sim)
+        print("sim", sim)
         # resp = {"tag": tag, "lemma": lem, "unit": unit, "sim": sim}
         prepared = {s[0]:str(s[1]) for s in sim}
         resp = {model_id: {unit: prepared} }
@@ -117,9 +111,14 @@ def sim():
     # return make_response(str(int(round(cos*100, 0))))
     # return make_response(reply)
     return jsonify(resp)
+
+
+
+@app.route('/menu', methods=['GET', 'POST'])
+def menu():
+    return send_file(menu_json_path)    
     
-    
-@app.route('/test', methods=['GET', 'POST'])
+@app.route('/status', methods=['GET', 'POST'])
 def test():
     # form = { "w1": "хлеб", "w2": "мясо", "pos": 'noun' }   
     # r = requests.post('http://0.0.0.0:5000/ruvec', form)
@@ -132,8 +131,13 @@ def test():
 # @app.route('/page')
 # def show_user_profile():    
     # return 'User'
+    
 	
 if __name__ == '__main__':
     app.run(host = "0.0.0.0", debug=True)
+    
     # app.run(debug=True, port=5000)
     # must be restarted manually!!!
+# export FLASK_ENV=development    
+    
+    
