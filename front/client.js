@@ -7,13 +7,10 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
     d3.json('/api/menu', function(menu) {
 
-        var descs = menu.descriptions;
-        var corpus = menu.corpus;
-        console.log("corpus", corpus);
-
         function buildFromAPI(keyword, data) {
             console.log("input", keyword, data);
-            data = data[Object.keys(data)[0]];
+			var mdl  = Object.keys(data)[0];
+            data = data[mdl];
             var wordpos = Object.keys(data)[0];
             data = data[wordpos];
             var word2;
@@ -28,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
             console.log("data", data);
 
             d3.select("#res").style("visibility", "visible");
+			d3.select('.source').html(menu.descriptions[mdl]["src"][0]["title"]);
             d3.select("#res2").html(wordpos)
 
             // console.log("word", keyword, wordpos);
@@ -48,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
                 var name = "ololo";
                 var tip = "kek";
 
-                if (descs[the_model]["src"][0]["pos"]) {
+                if (menu.descriptions[the_model]["src"][0]["pos"]) {
                     var wTag = k.split("_");
                     name = wTag[0];
                     tip = wTag[1];
@@ -57,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
                     tip = k;
                 }
 
-                // console.log(descs[the_model]["src"][0]["pos"], wTag);
+                // console.log(menu.descriptions[the_model]["src"][0]["pos"], wTag);
 
                 datanodes.push({
                     "key": k,
@@ -83,10 +81,9 @@ document.addEventListener("DOMContentLoaded", function(e) {
             buildGraph(datalinks, datanodes);
 
         }
-
-        function getFromAPI(wrd) {
-            // var url = wrd?("/syn?word="+encodeURIComponent(wrd)): "/last";
-            var url = wrd ? ("/sim?model=" + the_model + "&word=" + encodeURIComponent(wrd)) : "/last";
+		
+		
+		function retrieveData(key, url) {
 			console.log("query", url);
             d3.json(url, function(error, data) {
 				if (error) {
@@ -94,14 +91,43 @@ document.addEventListener("DOMContentLoaded", function(e) {
 				}
                 if (data) {
 					console.log("got", data);
-                    buildFromAPI(wrd, data);
+					
+					try{
+						var stor = window.localStorage;
+						stor.setItem('last', JSON.stringify(data))
+					} catch(e) {
+						console.log("error localStorage");
+					}
+					
+				
+                    buildFromAPI(key, data);
                 } else {
                     // alert("Такого слова нет в модели :(")
-                    d3.select("#nomodel").text(wrd);
+                    d3.select("#nomodel").text(key);
                     MicroModal.show('modal-1');
 
                 }
             });
+		}
+        function getFromAPI(wrd) {
+            // var url = wrd?("/syn?word="+encodeURIComponent(wrd)): "/last";
+			if(!wrd) {
+				try{
+					var stor = window.localStorage;
+					var last_data = stor.getItem('last');
+					if (last_data){
+						console.log("from localStorage OK");
+						var datum =  JSON.parse(last_data);
+						buildFromAPI(wrd, datum);
+					} else {
+						retrieveData('', "/last");
+					}
+				} catch(e) {
+					console.log("error", e);
+				}
+			} else {
+				retrieveData(wrd, "/sim?model=" + the_model + "&word=" + encodeURIComponent(wrd));
+			}
         }
 
 
@@ -272,7 +298,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
 
 
-        var myArray = Object.keys(corpus).map(key => corpus[key]);
+        var myArray = Object.keys(menu.corpus).map(key => menu.corpus[key]);
         console.log("aasfasfa", myArray);
 
         var divs = d3
@@ -300,7 +326,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
                 var moddivs = d3
                     .select('.modlist')
                     .selectAll('div')
-                    .data(corpus[d.iso]["models"])
+                    .data(menu.corpus[d.iso]["models"])
                     .enter()
                     .append('div')
                     .classed("row", true);
@@ -312,7 +338,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
                     .append('p')
                     .html(function(d) {
                         console.log(d);
-                        var m = descs[d];
+                        var m = menu.descriptions[d];
                         var title = m["src"].map(function(x) {
                             return x.title
                         }).join('/');
@@ -335,7 +361,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
                         console.log("hehe", d);
                         the_model = d;
 						d3.select('title').text(d);
-                        d3.select('.source').html(menu.descriptions[d]["src"][0]["title"]);						
+                        d3.select('.source').html(menu.descriptions[d]["src"][0]["title"]);
                         MicroModal.close('modal-2');
                     })
                     .text("load")
@@ -362,8 +388,11 @@ document.addEventListener("DOMContentLoaded", function(e) {
                 d3.select('#word').style('visibility', 'hidden');
                 d3.select('#search').style('visibility', 'hidden');
             } else {
-                console.log("backend", resp);
-                MicroModal.show('modal-2');
+                console.log("backend", resp);				
+				d3.select('.modsel').on("click", function(d) {
+                        MicroModal.show('modal-2');
+                    })
+                
             }
         });
 
