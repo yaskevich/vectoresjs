@@ -5,12 +5,13 @@ document.addEventListener("DOMContentLoaded", function(e) {
         height = window.innerHeight;
 
 
+
     d3.json('/api/menu', function(menu) {
 
         function buildFromAPI(keyword, data) {
             console.log("input", keyword, data);
-			var mdl  = Object.keys(data)[0];
-            data = data[mdl];
+			the_model  = Object.keys(data)[0];
+            data = data[the_model];
             var wordpos = Object.keys(data)[0];
             data = data[wordpos];
             var word2;
@@ -25,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
             console.log("data", data);
 
             d3.select("#res").style("visibility", "visible");
-			d3.select('.source').html(menu.descriptions[mdl]["src"][0]["title"]);
+			d3.select('.source').html(menu.descriptions[the_model]["src"][0]["title"]);
             d3.select("#res2").html(wordpos)
 
             // console.log("word", keyword, wordpos);
@@ -126,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
 					console.log("error", e);
 				}
 			} else {
+				console.log("get model", the_model);
 				retrieveData(wrd, "/sim?model=" + the_model + "&word=" + encodeURIComponent(wrd));
 			}
         }
@@ -182,19 +184,25 @@ document.addEventListener("DOMContentLoaded", function(e) {
                     return d.cls;
                 })
                 .attr("r", radius)
-                .on('mouseover', tip.show)
-                .on('mouseout', tip.hide)
+                // .on('mouseover', tip.show)
+                // .on('mouseout', tip.hide)
                 .on("click", function(d) {
-                    var word = d.name + "_" + d.tip;
+                    var word = d.tip? d.name + "_" + d.tip: d.name;
                     var startnode = d.index;
-                    console.log(word, startnode);
+                    console.log("click item", word, startnode);
                 });
 
             node.append("text")
                 .attr("dx", 12)
                 .attr("dy", ".35em")
+				.style('cursor', 'pointer')
                 .text(function(d) {
                     return d.name
+                })
+				.on("click", function(d) {
+                    var word = d.tip? d.name + "_" + d.tip: d.name;
+                    console.log("click text", word);
+					getFromAPI(d.name);
                 });
 
             nodesel.exit().remove();
