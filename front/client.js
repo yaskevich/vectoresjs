@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
                 }
             });
 		}
-        function getFromAPI(wrd) {
+        function getFromAPI(wrd, isClicked) {
             // var url = wrd?("/syn?word="+encodeURIComponent(wrd)): "/last";
 			if(!wrd) {
 				try{
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
 				}
 			} else {
 				console.log("get model", the_model);
-				retrieveData(wrd, "/sim?model=" + the_model + "&word=" + encodeURIComponent(wrd));
+				retrieveData(wrd, "/sim?model=" + the_model + "&word=" + encodeURIComponent(wrd) + (isClicked? "&click=1": ''));
 			}
         }
 
@@ -201,8 +201,8 @@ document.addEventListener("DOMContentLoaded", function(e) {
                 })
 				.on("click", function(d) {
                     var word = d.tip? d.name + "_" + d.tip: d.name;
-                    console.log("click text", word);
-					getFromAPI(d.name);
+                    console.log("click text", d);
+					getFromAPI(d.key, true);
                 });
 
             nodesel.exit().remove();
@@ -317,9 +317,6 @@ document.addEventListener("DOMContentLoaded", function(e) {
             .append('div')
             .classed("row", true);
 
-        //<div class=""></div>  <div class="col-sm-10"></div>
-
-
         divs
             .append('div')
             .classed("col-sm-10", true)
@@ -370,6 +367,10 @@ document.addEventListener("DOMContentLoaded", function(e) {
                         the_model = d;
 						d3.select('title').text(d);
                         d3.select('.source').html(menu.descriptions[d]["src"][0]["title"]);
+						
+						d3.select('.langmods').classed("hidden", false);
+						d3.select('.modlist').classed("hidden", true);
+						
                         MicroModal.close('modal-2');
                     })
                     .text("load")

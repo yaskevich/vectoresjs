@@ -73,6 +73,7 @@ def sim():
     unit = ""
     w = request.args.get('w', '')
     model_id = request.args.get('m', '')
+    isClicked = request.args.get('click', '')
     print("model in ", model_id)
     
     if model_id not in models:
@@ -82,7 +83,7 @@ def sim():
     # pos = request.form.get('pos', '').upper()
     if w:
         print(w)
-        if "upos" in model_id:
+        if isClicked and "upos" in model_id:
             print("get PoS")
             # print(menu_json['descriptions'])
             # https://lindat.mff.cuni.cz/services/udpipe/api-reference.php
@@ -90,8 +91,8 @@ def sim():
             if r.status_code == 200:
                 datum = r.json()                
                 res = list(map(lambda x: x.strip(), datum["result"].split("# ")))
-                print("res")
-                print(res)
+                # print("res")
+                # print(res)
                 gram = res[7].split("\t")
                 tag = gram[3]
                 lem = gram[2]
