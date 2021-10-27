@@ -1,0 +1,20 @@
+{
+  "name": "vector-client",
+  "version": "0.1.0",
+  "private": true,
+  "author": "Alyaxey Yaskevich",  
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "vue": "3.2.20",
+    "primevue": "^3.8.2",
+    "primeicons": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.9.3",
+    "@vue/compiler-sfc": "3.2.20",
+    "vite": "^2.6.12"
+  }
+}
