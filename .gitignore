@@ -1,3 +1,5 @@
+.ftpignore
+.ftpconfig
 server/vectores.db
 # Logs
 logs
