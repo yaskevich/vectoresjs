@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Simple visualization of RusVectores embeddings">
-<meta name="author" content="Alyaxey Yaskevich">
-<title>vectores.js</title>
-<script src="https://d3js.org/d3.v3.min.js"></script>
-<script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
-<link href="https://fonts.googleapis.com/css?family=Merriweather&amp;subset=cyrillic-ext" rel="stylesheet">
-<link rel="stylesheet" href="tip.css">
-<link rel="stylesheet" href="micromodal.css">
-<!-- https://minicss.org/docs#card-sections -->
-<!-- https://minicss.org/v2/contextual -->
-<!-- https://micromodal.now.sh/#installation -->
-<link rel="stylesheet" href="mini-default.min.css">
-<!-- <script src="d3.v3.min.js"></script> -->
-<script src="d3tip.js"></script>
-<link rel="icon" 
-      type="image/png"       
-      href="icons8-mind-map-40.png" />
-<!-- icon by https://icons8.com/license -->
-<style>
-*{
-font-family: 'Merriweather', serif;
-}
-.link {
-  stroke: #aaa;
-}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Simple visualization of RusVectores embeddings">
+    <meta name="author" content="Alyaxey Yaskevich">
+    <title>vectores.js</title>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Merriweather&amp;subset=cyrillic-ext" rel="stylesheet">
+    <link rel="stylesheet" href="tip.css">
+    <link rel="stylesheet" href="micromodal.css">
+    <!-- https://minicss.org/docs#card-sections -->
+    <!-- https://minicss.org/v2/contextual -->
+    <!-- https://micromodal.now.sh/#installation -->
+    <link rel="stylesheet" href="mini-default.min.css">
+    <!-- <script src="d3.v3.min.js"></script> -->
+    <script src="d3tip.js"></script>
+    <link rel="icon" type="image/png" href="icons8-mind-map-40.png" />
+    <!-- icon by https://icons8.com/license -->
+    <style>
+        * {
+            font-family: 'Merriweather', serif;
+        }
 
-.node text {
-stroke:#333;
-cursos:pointer;
-}
+        .link {
+            stroke: #aaa;
+        }
 
-/*
+        .node text {
+            stroke: #333;
+            cursor: pointer;
+        }
+
+        /*
 .node circle{
 stroke:#fff;
 stroke-width:3px;
@@ -43,259 +43,256 @@ fill:#555;
 }*/
 
 
-.low {
-	fill:#DB4437;
-	
-}
-.mid {
-	fill:#F4B400;
-}
-.high {
-	fill:#0F9D58;
-}
-</style>
-<script>
-document.addEventListener("DOMContentLoaded", function(e) {
-	MicroModal.init();
-	var width = window.innerWidth, height = window.innerHeight;
+        .low {
+            fill: #DB4437;
 
-	var svg = d3.select("body").append("svg")
-		.attr("width", width)
-		.attr("height", height);
+        }
 
-	var force = d3.layout.force()
-		.gravity(.05)
-		.distance(100)
-		.charge(-100)
-		.size([width, height]);
-		
-	var tip = d3.tip().attr('class', 'd3-tip').html(function(d) {return d.tip; });
-		svg.call(tip);
+        .mid {
+            fill: #F4B400;
+        }
 
-	var datanodes  = [], datalinks  = [],  i = 1;	
-	var delta = 0;
-	var radius = 10;
-		
-	d3.select("#word").on("keypress", function() {
-		if(d3.event.keyCode === 32 || d3.event.keyCode === 13){
-			doClick();
-		}
-	  });
+        .high {
+            fill: #0F9D58;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (e) {
+            MicroModal.init();
+            var width = window.innerWidth, height = window.innerHeight;
 
-	function buildGraph(inlinks, innodes){
-		
-		d3.selectAll(".link").remove();
-		d3.selectAll(".node").remove();
-		d3.selectAll("circle").remove();
-		
-		console.log("step1");
-		
-		var links = inlinks;
-	  force
-		  //.nodes(json.nodes)
-		  .nodes(innodes)
-		  .links(inlinks)
-		  .linkDistance(function(d) { 
-			// var dv  = Math.round(d.value * 100) / 100;
-			//var dis = (dv*100)-50;var dv  = Math.round(d.value * 100) / 100;
-			var dis  = d.value * 100;
-			var df = Math.log(dis);
-			var koef  = isFinite(df)?df:1;
-			dis = parseInt(dis * koef)+radius;
-			
-			console.log(d.key, d.value, koef, dis);
-			return  dis; 
-			}) 
-		  .start();
-		console.log("step2");
+            var svg = d3.select("body").append("svg")
+                .attr("width", width)
+                .attr("height", height);
 
-	  var linksel = svg.selectAll(".link")
-		  .data(inlinks);
-		  var link = linksel
-		.enter().append("line")
-		  .attr("class", "link")
-		.style("stroke-width", function(d) { return Math.sqrt(d.val); });
+            var force = d3.layout.force()
+                .gravity(.05)
+                .distance(100)
+                .charge(-100)
+                .size([width, height]);
 
-		
-		var nodesel = svg.selectAll(".node")
-		  .data(innodes);
-	  var node = nodesel
-		.enter().append("g")
-		  .attr("class", function(d) { return "node " + d.cls; })
-		  .call(force.drag);
+            var tip = d3.tip().attr('class', 'd3-tip').html(function (d) { return d.tip; });
+            svg.call(tip);
 
-	  node.append("circle")
-		 .attr("class", function(d) { return d.cls; })
-		  .attr("r",radius)
-			 .on('mouseover', tip.show)
-			.on('mouseout', tip.hide)
-			.on("click", function(d){
-				var word  = d.name+"_"+d.tip;
-				var startnode  = d.index;
-				console.log(word, startnode);
-				/*
-				d3.json("/syn?word="+encodeURIComponent(word), function(data) {
-					
-					data = data[Object.keys(data)[0]];
-					var wordpos = Object.keys(data)[0];
-					data = data[wordpos];
-					//console.log(datanodes.filter(function(d){return d.category == category;}));
-					console.log(data);
-					
-					var src  = datanodes.filter(function(d){return d.key == word;}).shift();
-					console.log(src);
-					
-					for(var k in data) {
-					   var wTag = k.split("_");
-					   
-					   datanodes.push({"key":k, "name":wTag[0],"group":3, tip:wTag[1], cls:(Math.random() > 0.5 ? "low": "mid"), "flag":i});
-					   //datalinks.push({"source":startnode,"target":i,"value":data[k]});
-					   var tg  = datanodes.filter(function(d){return d.key == k;}).shift();
-					   datalinks.push({"source":src,"target":tg,"value":data[k]});
-					   i++;
-					}
-					console.log(datanodes);
-					console.log(datalinks);
-					// buildGraph(datanodes, datalinks);
-				});
-				*/
-			});
+            var datanodes = [], datalinks = [], i = 1;
+            var delta = 0;
+            var radius = 10;
 
-	  node.append("text")
-		  .attr("dx", 12)
-		  .attr("dy", ".35em")
-		  .text(function(d) { return d.name });
+            d3.select("#word").on("keypress", function () {
+                if (d3.event.keyCode === 32 || d3.event.keyCode === 13) {
+                    doClick();
+                }
+            });
 
-		  nodesel.exit().remove();
-		  
-	  force.on("tick", function() {
-		link.attr("x1", function(d) { return d.source.x; })
-			.attr("y1", function(d) { return d.source.y; })
-			.attr("x2", function(d) { return d.target.x; })
-			.attr("y2", function(d) { return d.target.y; });
+            function buildGraph(inlinks, innodes) {
 
-		node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-	  });
-	}	
-		
-		function getFromAPI(wrd){
-		var url = wrd?("/syn?word="+encodeURIComponent(wrd)): "/last";
-			d3.json(url, function(data) {
-				if (data) {
-					buildFromAPI(wrd, data);	
-				} else {
-					// alert("Такого слова нет в модели :(")
-					d3.select("#nomodel").text(wrd);
-					MicroModal.show('modal-1'); 
-					
-				}
-			});
-		}
-		
-		function buildFromAPI(keyword, data){			
-			// console.log(keyword, data);
-			data = data[Object.keys(data)[0]];
-			var wordpos = Object.keys(data)[0];
-			data = data[wordpos];
-			var word2;
-			if (!keyword){
-				var pp = wordpos.split("_");
-				keyword  = pp[0];
-				word2 = pp[1];
-			} else {
-				word2  = wordpos.substring(keyword.length+1);
-			}
-			
-			console.log("data", data);
-			
-			d3.select("#res").style("visibility", "visible");
-			d3.select("#res2").html(wordpos)
+                d3.selectAll(".link").remove();
+                d3.selectAll(".node").remove();
+                d3.selectAll("circle").remove();
 
-			// console.log("word", keyword, wordpos);
-			
+                console.log("step1");
 
-			datanodes  = [], datalinks  = [],  i = 1;
-			
-			datanodes.push({"key":wordpos, "name":keyword,"group":3, tip:word2, cls:"high", "flag":1});
-			for(var k in data) {
-				var wTag = k.split("_");
+                var links = inlinks;
+                force
+                    //.nodes(json.nodes)
+                    .nodes(innodes)
+                    .links(inlinks)
+                    .linkDistance(function (d) {
+                        // var dv  = Math.round(d.value * 100) / 100;
+                        //var dis = (dv*100)-50;var dv  = Math.round(d.value * 100) / 100;
+                        var dis = d.value * 100;
+                        var df = Math.log(dis);
+                        var koef = isFinite(df) ? df : 1;
+                        dis = parseInt(dis * koef) + radius;
+                        console.log(d.key, d.value, koef, dis);
+                        return dis;
+                    })
+                    .start();
+                console.log("step2");
 
-				datanodes.push({"key":k, "name":wTag[0],"group":3, tip:wTag[1], cls:(Math.random() > 0.5 ? "low": "mid"), "flag":i});
-				var dif  = 1 - data[k];
-				if ((delta && delta > dif) || !delta) { delta  = dif; }
-				datalinks.push({"source":0,"target":i,"value":dif, "key":k});
-				i++;
-			}
-			console.log(datanodes, datalinks);
-			buildGraph(datalinks, datanodes);
-		
-		}
-		
-		d3.select("#search").on("click", function(){
-			doClick();
-		});
+                var linksel = svg.selectAll(".link")
+                    .data(inlinks);
+                var link = linksel
+                    .enter().append("line")
+                    .attr("class", "link")
+                    .style("stroke-width", function (d) { return Math.sqrt(d.val); });
 
-		
-		function doClick(){
-		var word = d3.select("#word").property("value"); 
-			if (/^[А-ЯЁа-яё]+$/.test(word) && word) {
-				//console.log("word", word);
-				getFromAPI(word);
-			} else {
-				alert("Слово "+word+" не годится для поиска!");
-			}
-		}
-		
-		function buildDef(){
-			d3.json("/def", function(data) {
-				var nds  = [], lnks  = [],  i = 0;
-				var query  = "";
-				for(var k in data["frequencies"]) {
-				   var wTag = k.split("_");
-				   nds.push({"name":wTag[0],"group":3, tip:wTag[1], cls:data["frequencies"][k][1], "flag":i});
-				   i ? lnks.push({"source":0,"target":i,"value":data["neighbors"][i-1][1]}): query = wTag[0];
-				   i++;
-				}
-				//console.log(nds, lnks);
-				//console.log({nds: nds, lnks:lnks});
-				buildGraph(lnks, nds);	
-				});
-		}
 
-		// buildDef();
-		getFromAPI();
-});
-</script>
+                var nodesel = svg.selectAll(".node")
+                    .data(innodes);
+                var node = nodesel
+                    .enter().append("g")
+                    .attr("class", function (d) { return "node " + d.cls; })
+                    .call(force.drag);
+
+                node.append("circle")
+                    .attr("class", function (d) { return d.cls; })
+                    .attr("r", radius)
+                    .on('mouseover', tip.show)
+                    .on('mouseout', tip.hide)
+                    .on("click", function (d) {
+                        var word = d.name + "_" + d.tip;
+                        var startnode = d.index;
+                        console.log(word, startnode);
+                        /*
+                        d3.json("/syn?word="+encodeURIComponent(word), function(data) {
+                        
+                        data = data[Object.keys(data)[0]];
+                        var wordpos = Object.keys(data)[0];
+                        data = data[wordpos];
+                        //console.log(datanodes.filter(function(d){return d.category == category;}));
+                        console.log(data);
+                        
+                        var src  = datanodes.filter(function(d){return d.key == word;}).shift();
+                        console.log(src);
+                        
+                        for(var k in data) {
+                        var wTag = k.split("_");
+                        
+                        datanodes.push({"key":k, "name":wTag[0],"group":3, tip:wTag[1], cls:(Math.random() > 0.5 ? "low": "mid"), "flag":i});
+                        //datalinks.push({"source":startnode,"target":i,"value":data[k]});
+                        var tg  = datanodes.filter(function(d){return d.key == k;}).shift();
+                        datalinks.push({"source":src,"target":tg,"value":data[k]});
+                        i++;
+                        }
+                        console.log(datanodes);
+                        console.log(datalinks);
+                        // buildGraph(datanodes, datalinks);
+                        });
+                        */
+                    });
+
+                node.append("text")
+                    .attr("dx", 12)
+                    .attr("dy", ".35em")
+                    .text(function (d) { return d.name });
+
+                nodesel.exit().remove();
+
+                force.on("tick", function () {
+                    link.attr("x1", function (d) { return d.source.x; })
+                        .attr("y1", function (d) { return d.source.y; })
+                        .attr("x2", function (d) { return d.target.x; })
+                        .attr("y2", function (d) { return d.target.y; });
+
+                    node.attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
+                });
+            }
+
+            function getFromAPI(wrd) {
+                var url = wrd ? ("/syn?word=" + encodeURIComponent(wrd)) : "/last";
+                d3.json(url, function (data) {
+                    if (data) {
+                        buildFromAPI(wrd, data);
+                    } else {
+                        // alert("Такого слова нет в модели :(")
+                        d3.select("#nomodel").text(wrd);
+                        MicroModal.show('modal-1');
+
+                    }
+                });
+            }
+
+            function buildFromAPI(keyword, data) {
+                // console.log(keyword, data);
+                data = data[Object.keys(data)[0]];
+                var wordpos = Object.keys(data)[0];
+                data = data[wordpos];
+                var word2;
+                if (!keyword) {
+                    var pp = wordpos.split("_");
+                    keyword = pp[0];
+                    word2 = pp[1];
+                } else {
+                    word2 = wordpos.substring(keyword.length + 1);
+                }
+
+                console.log("data", data);
+                d3.select("#res").style("visibility", "visible");
+                d3.select("#res2").html(wordpos)
+                // console.log("word", keyword, wordpos);
+                datanodes = [], datalinks = [], i = 1;
+                datanodes.push({ "key": wordpos, "name": keyword, "group": 3, tip: word2, cls: "high", "flag": 1 });
+                for (var k in data) {
+                    var wTag = k.split("_");
+                    datanodes.push({ "key": k, "name": wTag[0], "group": 3, tip: wTag[1], cls: (Math.random() > 0.5 ? "low" : "mid"), "flag": i });
+                    var dif = 1 - data[k];
+                    if ((delta && delta > dif) || !delta) { delta = dif; }
+                    datalinks.push({ "source": 0, "target": i, "value": dif, "key": k });
+                    i++;
+                }
+                console.log(datanodes, datalinks);
+                buildGraph(datalinks, datanodes);
+            }
+
+            d3.select("#search").on("click", function () {
+                doClick();
+            });
+
+            function doClick() {
+                var word = d3.select("#word").property("value").trim();
+                if (/^[А-ЯЁа-яё]+$/.test(word) && word) {
+                    //console.log("word", word);
+                    getFromAPI(word);
+                } else {
+                    alert("Слово " + word + " не годится для поиска!");
+                }
+            }
+
+            function buildDef() {
+                d3.json("/def", function (data) {
+                    var nds = [], lnks = [], i = 0;
+                    var query = "";
+                    for (var k in data["frequencies"]) {
+                        var wTag = k.split("_");
+                        nds.push({ "name": wTag[0], "group": 3, tip: wTag[1], cls: data["frequencies"][k][1], "flag": i });
+                        i ? lnks.push({ "source": 0, "target": i, "value": data["neighbors"][i - 1][1] }) : query = wTag[0];
+                        i++;
+                    }
+                    //console.log(nds, lnks);
+                    //console.log({nds: nds, lnks:lnks});
+                    buildGraph(lnks, nds);
+                });
+            }
+
+            // buildDef();
+            getFromAPI();
+        });
+    </script>
 </head>
+
 <body>
-	<div class="row">
-	  <div class="card warning"><input type="text" name="word" id="word" value="" placeholder="патефон"></div>
-	  <div class="card"><button class="secondary" id="search">Искать</button></div>
-	  <div class="card error" id="res" style="visibility:hidden"><div class="section" id="res2"></div></div>
-	</div>
-	
-	
-<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
-    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-      <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
-        <header class="modal__header">
-          <h2 class="modal__title" id="modal-1-title">
-            О нет! :-(
-          </h2>
-          <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
-        </header>
-        <main class="modal__content" id="modal-1-content">
-          <p>
-            Слово <code id="nomodel">tab</code> отсутствует в модели!
-          </p>
-        </main>
-        <!-- <footer class="modal__footer"> -->
-          <!-- <button class="modal__btn modal__btn-primary">Continue</button> -->
-          <!-- <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Закрыть, испытывая светлую грусть</button> -->
-        <!-- </footer> -->
-      </div>
+    <div class="row">
+        <div class="card warning"><input type="text" name="word" id="word" value="" placeholder="патефон"></div>
+        <div class="card"><button class="secondary" id="search">Искать</button></div>
+        <div class="card error" id="res" style="visibility:hidden">
+            <div class="section" id="res2"></div>
+        </div>
     </div>
-  </div>	
+
+
+    <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+                <header class="modal__header">
+                    <h2 class="modal__title" id="modal-1-title">
+                        О нет! :-(
+                    </h2>
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                </header>
+                <main class="modal__content" id="modal-1-content">
+                    <p>
+                        Слово <code id="nomodel">tab</code> отсутствует в модели!
+                    </p>
+                </main>
+                <!-- <footer class="modal__footer"> -->
+                <!-- <button class="modal__btn modal__btn-primary">Continue</button> -->
+                <!-- <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Закрыть, испытывая светлую грусть</button> -->
+                <!-- </footer> -->
+            </div>
+        </div>
+    </div>
 
 </body>
+
 </html>
