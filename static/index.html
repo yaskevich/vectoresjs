@@ -16,7 +16,8 @@
     <!-- https://minicss.org/docs#card-sections -->
     <!-- https://minicss.org/v2/contextual -->
     <!-- https://micromodal.now.sh/#installation -->
-    <link rel="stylesheet" href="mini-default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/2.3.7/mini-default.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- <script src="d3.v3.min.js"></script> -->
     <script src="d3tip.js"></script>
     <link rel="icon" type="image/png" href="icons8-mind-map-40.png" />
@@ -180,7 +181,7 @@ fill:#555;
             }
 
             function getFromAPI(wrd) {
-                var url = wrd ? ("/syn?word=" + encodeURIComponent(wrd)) : "/last";
+                var url = wrd ? ("https://rusvectores.alyaxey-yaskevich.workers.dev/" + encodeURIComponent(wrd)) : "def.json";
                 d3.json(url, function (data) {
                     if (data) {
                         buildFromAPI(wrd, data);
@@ -240,7 +241,7 @@ fill:#555;
             }
 
             function buildDef() {
-                d3.json("/def", function (data) {
+                d3.json("def.json", function (data) {
                     var nds = [], lnks = [], i = 0;
                     var query = "";
                     for (var k in data["frequencies"]) {
